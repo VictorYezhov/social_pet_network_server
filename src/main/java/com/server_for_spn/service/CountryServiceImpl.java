@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class CountryServiceImpl implements CountryService {
     @Autowired
-    CountryDAO countryDAO;
+    private CountryDAO countryDAO;
 
     @Override
     public void save(Country country) {

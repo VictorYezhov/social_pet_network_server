@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class PetServiceImpl implements PetService {
     @Autowired
-    PetDAO petDAO;
+    private PetDAO petDAO;
 
     @Override
     public void save(Pet pet) {
