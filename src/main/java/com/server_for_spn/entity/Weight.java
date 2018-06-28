@@ -1,6 +1,6 @@
 package com.server_for_spn.entity;
 
-import com.server_for_spn.enums.PetType;
+import com.server_for_spn.enums.MassUnit;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,17 +9,16 @@ import java.util.List;
  * Created by Victor on 28.06.2018.
  */
 @Entity
-public class Breed {
+public class Weight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Double mass;
     @Enumerated
-    private PetType type;
+    private  MassUnit massUnit;
 
-    private String name;
-
-    @OneToMany(mappedBy = "breed", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "weight", fetch = FetchType.LAZY)
     private List<Pet> petList;
 
     public Long getId() {
@@ -30,20 +29,20 @@ public class Breed {
         this.id = id;
     }
 
-    public PetType getType() {
-        return type;
+    public Double getMass() {
+        return mass;
     }
 
-    public void setType(PetType type) {
-        this.type = type;
+    public void setMass(Double mass) {
+        this.mass = mass;
     }
 
-    public String getName() {
-        return name;
+    public MassUnit getMassUnit() {
+        return massUnit;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMassUnit(MassUnit massUnit) {
+        this.massUnit = massUnit;
     }
 
     public List<Pet> getPetList() {
