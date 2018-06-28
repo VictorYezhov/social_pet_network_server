@@ -3,9 +3,11 @@ package com.server_for_spn.service;
 import com.server_for_spn.dao.CountryDAO;
 import com.server_for_spn.entity.Country;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CountryServiceImpl implements CountryService {
     @Autowired
     CountryDAO countryDAO;

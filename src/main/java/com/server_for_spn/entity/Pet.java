@@ -27,7 +27,7 @@ public class Pet {
     @JoinColumn(name = "weight_id")
     private Weight weight;
 
-    private String tagNuber;
+    private String tagNumber;
 
     @Enumerated
     private  Attitude attitude;
@@ -81,11 +81,11 @@ public class Pet {
     }
 
     public String getTagNuber() {
-        return tagNuber;
+        return tagNumber;
     }
 
-    public void setTagNuber(String tagNuber) {
-        this.tagNuber = tagNuber;
+    public void setTagNuber(String tagNumber) {
+        this.tagNumber = tagNumber;
     }
 
     public Attitude getAttitude() {
