@@ -1,9 +1,8 @@
 package com.server_for_spn.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
 
 /**
  * Created by Victor on 28.06.2018.
@@ -20,6 +19,11 @@ public class User {
     private String password;
     private String phoneNumber;
     private String Address;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    @JsonManagedReference
+    private City city;
 
 
     public Long getId() {
@@ -76,5 +80,13 @@ public class User {
 
     public void setAddress(String address) {
         Address = address;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 }
