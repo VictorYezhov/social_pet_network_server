@@ -13,6 +13,7 @@ public class Country {
     private Long id;
 
     private String name;
+    private String code;
 
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
     @JsonBackReference
@@ -40,5 +41,13 @@ public class Country {
 
     public void setCities(List<City> cities) {
         this.cities = cities;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

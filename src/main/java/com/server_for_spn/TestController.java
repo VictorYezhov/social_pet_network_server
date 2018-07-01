@@ -15,4 +15,10 @@ public class TestController {
     public String test(){
         return "test\n";
     }
+
+
+    @GetMapping("/secureTest")
+    public String secureTest(){
+        return "you have succesfully loggined\n";
+    }
 }
