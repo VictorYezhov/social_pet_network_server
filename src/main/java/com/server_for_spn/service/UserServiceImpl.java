@@ -2,6 +2,8 @@ package com.server_for_spn.service;
 
 import com.server_for_spn.dao.UserDAO;
 import com.server_for_spn.dto.RegistrationForm;
+import com.server_for_spn.entity.City;
+import com.server_for_spn.entity.Country;
 import com.server_for_spn.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,11 +16,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private  UserDAO userDAO;
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private CountryService countryService;
 
     @Override
     public void save(User user) {
@@ -49,6 +55,7 @@ public class UserServiceImpl implements UserService {
     public String registration(RegistrationForm registrationForm) {
 
 
+
         registrationForm.setPassword(bCryptPasswordEncoder.encode(registrationForm.getPassword()));
         if(checkExistence(registrationForm.getEmail(), registrationForm.getPassword())){
             return "User with such email and password already exists";
@@ -61,10 +68,22 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(registrationForm.getPhoneNumber());
         user.setAddress("Not set yet");
 
+        Country country  = countryService.findByName(registrationForm.getCountry());
+        if(country == null){
+            return "No such country exists\n";
+        }
+        City city = cityService.findByNameAndCountry(registrationForm.getCity(), country);
 
+        if(city == null){
+            city = new City();
+            city.setName(registrationForm.getCity());
+            city.setCountry(country);
+            cityService.save(city);
+        }
+        user.setCity(city);
 
-
-        return null;
+        userDAO.save(user);
+        return "You have been registered!";
     }
 
     @Override

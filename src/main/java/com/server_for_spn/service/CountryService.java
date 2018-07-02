@@ -15,4 +15,6 @@ public interface CountryService {
     void delete(Long  id);
 
     void update(Country country);
+
+    Country findByName(String name);
 }

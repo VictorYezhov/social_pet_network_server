@@ -1,4 +1,4 @@
-package com.server_for_spn.configuraton;
+package com.server_for_spn.security;
 
 /**
  * Created by Victor on 01.07.2018.

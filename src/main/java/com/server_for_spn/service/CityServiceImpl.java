@@ -2,6 +2,7 @@ package com.server_for_spn.service;
 
 import com.server_for_spn.dao.CityDAO;
 import com.server_for_spn.entity.City;
+import com.server_for_spn.entity.Country;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,10 @@ public class CityServiceImpl implements CityService {
     @Override
     public void update(City city) {
         cityDAO.save(city);
+    }
+
+    @Override
+    public City findByNameAndCountry(String name, Country country) {
+        return cityDAO.findFirstByNameAndAndCountry(name, country);
     }
 }

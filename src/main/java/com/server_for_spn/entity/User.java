@@ -22,7 +22,6 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    @JsonManagedReference
     private City city;
 
 

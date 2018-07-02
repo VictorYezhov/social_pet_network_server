@@ -12,11 +12,11 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
     private String code;
+    private String name;
+
 
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-    @JsonBackReference
     private List<City> cities;
 
     public Long getId() {

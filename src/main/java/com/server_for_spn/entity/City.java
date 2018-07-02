@@ -15,11 +15,9 @@ public class City {
 
     @ManyToOne
     @JoinColumn(name = "country_id")
-    @JsonManagedReference
     private Country country;
 
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
-    @JsonBackReference
     private List<User> users;
 
     public Long getId() {
