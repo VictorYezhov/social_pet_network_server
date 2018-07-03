@@ -18,7 +18,7 @@ public class TestController {
     @GetMapping("/test")
     public String test()
     {
-        System.out.println(bCryptPasswordEncoder.encode("vicyezh1998"));
+       
         return "test\n";
     }
 
