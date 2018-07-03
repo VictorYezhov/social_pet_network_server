@@ -67,4 +67,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .compact();
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+
+        System.out.println("Login failed");
+        response.addHeader(HEADER_STRING, "Login Failed" );
+        super.unsuccessfulAuthentication(request, response, failed);
+
+    }
 }
