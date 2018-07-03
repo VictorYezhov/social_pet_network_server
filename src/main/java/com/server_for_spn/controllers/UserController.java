@@ -22,6 +22,7 @@ public class UserController {
     public String registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
             return "NULL";
+        System.out.println(registrationForm.toString());
         return userService.registration(registrationForm);
         //return  registrationForm.toString();
     }
