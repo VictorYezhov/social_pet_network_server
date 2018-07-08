@@ -26,9 +26,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CountryService countryService;
 
+
+
+
     @Override
     public void save(User user) {
         userDAO.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userDAO.findFirstByEmail(email);
     }
 
     @Override
@@ -90,4 +98,8 @@ public class UserServiceImpl implements UserService {
     public boolean checkExistence(String email, String password) {
         return userDAO.findFirstByEmailAndPassword(email, password) != null;
     }
+
+
+
+
 }
