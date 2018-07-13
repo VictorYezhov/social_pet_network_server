@@ -42,5 +42,11 @@ public class UserController {
         return new UserInformationForm(user.getPhoneNumber(), place);
     }
 
+    @PostMapping("/get_user_name")
+    public String sendUserName(@RequestBody String id){
+        User user = userService.findOne(Long.parseLong(id.split(":")[1].split("\"")[1]));
+        return user.getName() + " " + user.getFamilyName();
+    }
+
 
 }
