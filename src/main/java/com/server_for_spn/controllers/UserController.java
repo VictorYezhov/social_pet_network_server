@@ -39,14 +39,7 @@ public class UserController {
     public UserInformationForm sendUserInformation(@RequestBody String id){
         User user = userService.findOne(Long.parseLong(id.split(":")[1].split("\"")[1]));
         String place = user.getCity().getName().toString() + ", " + user.getCity().getCountry().getName().toString();
-        return new UserInformationForm(user.getPhoneNumber(), place);
+        return new UserInformationForm(user.getPhoneNumber(), place, user.getEmail(), user.getName() + " " + user.getFamilyName());
     }
-
-    @PostMapping("/get_user_name")
-    public String sendUserName(@RequestBody String id){
-        User user = userService.findOne(Long.parseLong(id.split(":")[1].split("\"")[1]));
-        return user.getName() + " " + user.getFamilyName();
-    }
-
 
 }
