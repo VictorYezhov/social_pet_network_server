@@ -1,6 +1,8 @@
 package com.server_for_spn.controllers;
 
 import com.server_for_spn.dto.RegistrationForm;
+import com.server_for_spn.dto.UserInformationForm;
+import com.server_for_spn.entity.User;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +33,13 @@ public class UserController {
     @GetMapping("/loginFailed")
     public String loginFail(){
         return "login fail";
+    }
+
+    @PostMapping("/get_user_information")
+    public UserInformationForm sendUserInformation(@RequestBody String id){
+        User user = userService.findOne(Long.parseLong(id.split(":")[1].split("\"")[1]));
+        String place = user.getCity().getName().toString() + ", " + user.getCity().getCountry().getName().toString();
+        return new UserInformationForm(user.getPhoneNumber(), place);
     }
 
 
