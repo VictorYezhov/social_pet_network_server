@@ -37,6 +37,8 @@ public class UserController {
 
     @PostMapping("/get_user_information")
     public UserInformationForm sendUserInformation(@RequestBody String id){
+        System.out.println(id);
+        System.out.println(id.split(":")[1].split("\"")[1]);
         User user = userService.findOne(Long.parseLong(id.split(":")[1].split("\"")[1]));
         String place = user.getCity().getName().toString() + ", " + user.getCity().getCountry().getName().toString();
         return new UserInformationForm(user.getPhoneNumber(), place);

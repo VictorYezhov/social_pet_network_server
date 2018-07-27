@@ -2,6 +2,7 @@ package com.server_for_spn.service;
 
 import com.server_for_spn.entity.Breed;
 import com.server_for_spn.entity.City;
+import com.server_for_spn.enums.PetType;
 
 import java.util.List;
 
@@ -20,5 +21,6 @@ public interface BreedService {
 
     void update(Breed breed);
 
+    List<Breed> findAllByType(PetType petType);
 
 }

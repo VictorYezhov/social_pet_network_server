@@ -22,7 +22,7 @@ public class CountryController {
 
 
 
-    @GetMapping("/loadCountryList")
+    @GetMapping("/api/loadCountryList")
     public List<CountryDTO> loadCountryList(){
 
         System.out.println("Load Countries Request");

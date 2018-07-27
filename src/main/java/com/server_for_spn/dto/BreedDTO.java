@@ -1,27 +1,24 @@
-package com.server_for_spn.entity;
+package com.server_for_spn.dto;
 
+import com.server_for_spn.entity.Breed;
 import com.server_for_spn.enums.PetType;
 
-import javax.persistence.*;
-import java.util.List;
-
 /**
- * Created by Victor on 28.06.2018.
+ * Created by Victor on 27.07.2018.
  */
-@Entity
-public class Breed {
+public class BreedDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated
     private PetType type;
 
     private String name;
 
-    @OneToMany(mappedBy = "breed", fetch = FetchType.LAZY)
-    private List<Pet> petList;
+    public BreedDTO(Breed breed) {
+        id = breed.getId();
+        type = breed.getType();
+        name = breed.getName();
+    }
 
     public Long getId() {
         return id;
@@ -45,13 +42,5 @@ public class Breed {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Pet> getPetList() {
-        return petList;
-    }
-
-    public void setPetList(List<Pet> petList) {
-        this.petList = petList;
     }
 }

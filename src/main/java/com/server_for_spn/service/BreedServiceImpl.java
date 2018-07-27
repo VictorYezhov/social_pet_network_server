@@ -2,6 +2,7 @@ package com.server_for_spn.service;
 
 import com.server_for_spn.dao.BreedDAO;
 import com.server_for_spn.entity.Breed;
+import com.server_for_spn.enums.PetType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,10 @@ public class BreedServiceImpl implements BreedService {
     @Override
     public void update(Breed breed) {
         breedDAO.save(breed);
+    }
+
+    @Override
+    public List<Breed> findAllByType(PetType petType) {
+        return breedDAO.findAllByType(petType);
     }
 }
