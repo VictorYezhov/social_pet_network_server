@@ -1,17 +1,33 @@
 package com.server_for_spn.dto;
 
+import com.server_for_spn.entity.City;
+import com.server_for_spn.entity.Country;
+
 /**
  * Created by Victor on 01.07.2018.
  */
 public class RegistrationForm {
 
     private String name;
-    private String familyName;
-    private String phoneNumber;
-    private String country;
-    private String city;
+    private String surname;
+    private String phone;
+    private CityDTO city;
     private String email;
     private String password;
+    private PetDTO pet;
+
+    public RegistrationForm() {
+    }
+
+    public RegistrationForm(String name, String surname, String phone, CityDTO city, String email, String password, PetDTO pet) {
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.city = city;
+        this.email = email;
+        this.password = password;
+        this.pet = pet;
+    }
 
     public String getName() {
         return name;
@@ -21,35 +37,27 @@ public class RegistrationForm {
         this.name = name;
     }
 
-    public String getFamilyName() {
-        return familyName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
+    public CityDTO getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(CityDTO city) {
         this.city = city;
     }
 
@@ -69,16 +77,11 @@ public class RegistrationForm {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "RegistrationForm{" +
-                "name='" + name + '\'' +
-                ", familyName='" + familyName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public PetDTO getPet() {
+        return pet;
+    }
+
+    public void setPet(PetDTO pet) {
+        this.pet = pet;
     }
 }

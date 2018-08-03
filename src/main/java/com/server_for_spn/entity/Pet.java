@@ -1,5 +1,6 @@
 package com.server_for_spn.entity;
 
+import com.server_for_spn.dto.PetDTO;
 import com.server_for_spn.enums.Attitude;
 import com.server_for_spn.enums.PetType;
 import com.server_for_spn.enums.Sex;
@@ -16,7 +17,7 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private int age;
+    private Long age;
     @ManyToOne
     @JoinColumn(name = "breed_id")
     private Breed breed;
@@ -27,10 +28,28 @@ public class Pet {
     @JoinColumn(name = "weight_id")
     private Weight weight;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String tagNumber;
 
     @Enumerated
     private  Attitude attitude;
+
+    public Pet() {
+    }
+
+    public Pet(PetDTO petDTO) {
+        this.name = petDTO.getName();
+        this.age = petDTO.getAge();
+        this.breed = petDTO.getBreed();
+        this.sex = petDTO.getSex();
+        //this.weight = petDTO.getWeight();
+        //this.user = user;
+        this.tagNumber = petDTO.getTagNumber();
+        this.attitude = petDTO.getAttitude();
+    }
 
     public Long getId() {
         return id;
@@ -48,11 +67,11 @@ public class Pet {
         this.name = name;
     }
 
-    public int getAge() {
+    public Long getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Long age) {
         this.age = age;
     }
 
@@ -80,11 +99,11 @@ public class Pet {
         this.weight = weight;
     }
 
-    public String getTagNuber() {
+    public String getTagNumber() {
         return tagNumber;
     }
 
-    public void setTagNuber(String tagNumber) {
+    public void setTagNumber(String tagNumber) {
         this.tagNumber = tagNumber;
     }
 
@@ -94,5 +113,13 @@ public class Pet {
 
     public void setAttitude(Attitude attitude) {
         this.attitude = attitude;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

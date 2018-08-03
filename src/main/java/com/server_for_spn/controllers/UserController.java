@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Base64;
+
 /**
  * Created by Victor on 01.07.2018.
  */
@@ -24,9 +26,10 @@ public class UserController {
     public String registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
             return "NULL";
-        System.out.println(registrationForm.toString());
-        return userService.registration(registrationForm);
-        //return  registrationForm.toString();
+
+        userService.registration(registrationForm);
+
+        return "OK";
     }
 
 

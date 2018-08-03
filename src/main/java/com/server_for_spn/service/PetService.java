@@ -14,4 +14,6 @@ public interface PetService {
     void delete(Long  id);
 
     void update(Pet pet);
+
+    Pet findOneByTagNumber(String tagNumber);
 }

@@ -3,6 +3,8 @@ package com.server_for_spn.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Victor on 28.06.2018.
@@ -24,6 +26,12 @@ public class User {
     @JoinColumn(name = "city_id")
     private City city;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Pet> petList;
+
+    public User() {
+        petList = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -87,5 +95,13 @@ public class User {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public List<Pet> getPetList() {
+        return petList;
+    }
+
+    public void setPetList(List<Pet> petList) {
+        this.petList = petList;
     }
 }

@@ -36,4 +36,9 @@ public class PetServiceImpl implements PetService {
     public void update(Pet pet) {
         petDAO.save(pet);
     }
+
+    @Override
+    public Pet findOneByTagNumber(String tagNumber) {
+        return petDAO.findByTagNumber(tagNumber);
+    }
 }
