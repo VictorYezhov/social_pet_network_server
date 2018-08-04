@@ -31,6 +31,7 @@ public class BreedController {
 
     @GetMapping("/api/getBreedsForType")
     private List<BreedDTO> getAllBreadsForType(@RequestParam PetType petType){
+        System.out.println("GET BREEDS FOR TYPE REQUEST");
         List<Breed> breeds = breedService.findAllByType(petType);
         List<BreedDTO> breedDTOS = new ArrayList<>();
         for (Breed b:

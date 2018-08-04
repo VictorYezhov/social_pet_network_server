@@ -26,9 +26,7 @@ public class UserController {
     public String registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
             return "NULL";
-
         userService.registration(registrationForm);
-
         return "OK";
     }
 
