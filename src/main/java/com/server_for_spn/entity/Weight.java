@@ -1,8 +1,10 @@
 package com.server_for_spn.entity;
 
+import com.server_for_spn.dto.WeightDTO;
 import com.server_for_spn.enums.MassUnit;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +22,16 @@ public class Weight {
 
     @OneToMany(mappedBy = "weight", fetch = FetchType.LAZY)
     private List<Pet> petList;
+
+    public Weight() {
+        petList = new ArrayList<>();
+    }
+
+    public Weight(WeightDTO weightDTO) {
+        this.mass = weightDTO.getMass();
+        this.massUnit = weightDTO.getMassUnit();
+        petList = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;

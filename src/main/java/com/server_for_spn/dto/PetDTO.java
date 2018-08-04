@@ -12,14 +12,14 @@ public class PetDTO {
     private Long age;
     private Sex sex;
     private String tagNumber;
-    private Double weight;
+    private WeightDTO weight;
     private Attitude attitude;
 
     public PetDTO(){
 
     }
 
-    public PetDTO(String name, Breed breed, Long age, Sex sex, String tagNumber, Double weight, Attitude attitude) {
+    public PetDTO(String name, Breed breed, Long age, Sex sex, String tagNumber, WeightDTO weight, Attitude attitude) {
         this.name = name;
         this.breed = breed;
         this.age = age;
@@ -36,7 +36,12 @@ public class PetDTO {
         this.age = pet.getAge();
         this.sex = pet.getSex();
         this.tagNumber = pet.getTagNumber();
-        this.weight = pet.getWeight().getMass();
+
+        WeightDTO weightDTO = new WeightDTO();
+        weightDTO.setMass(pet.getWeight().getMass());
+        weightDTO.setMassUnit(pet.getWeight().getMassUnit());
+
+        this.weight = weightDTO;
         this.attitude = pet.getAttitude();
 
     }
@@ -89,11 +94,11 @@ public class PetDTO {
         this.tagNumber = tagNumber;
     }
 
-    public Double getWeight() {
+    public WeightDTO getWeight() {
         return weight;
     }
 
-    public void setWeight(Double weight) {
+    public void setWeight(WeightDTO weight) {
         this.weight = weight;
     }
 
