@@ -1,7 +1,7 @@
 package com.server_for_spn.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.server_for_spn.enums.DeviceOS;
+
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,8 +22,6 @@ public class User {
     private String password;
     private String phoneNumber;
     private String Address;
-    @Enumerated
-    private DeviceOS deviceOS;
 
     private String fcmToken;
 
@@ -147,11 +145,11 @@ public class User {
     }
 
 
-    public DeviceOS getDeviceOS() {
-        return deviceOS;
-    }
+    
+    
+    
 
-    public void setDeviceOS(DeviceOS deviceOS) {
-        this.deviceOS = deviceOS;
-    }
+    
+    
+    
 }

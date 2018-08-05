@@ -1,6 +1,6 @@
 package com.server_for_spn.dto;
 
-import com.server_for_spn.enums.DeviceOS;
+
 
 /**
  * Created by Victor on 05.08.2018.
@@ -8,7 +8,7 @@ import com.server_for_spn.enums.DeviceOS;
 public class UpdateTokenForm {
     private String id;
     private String token;
-    private DeviceOS deviceOS;
+
 
     public void setId(String id) {
         this.id = id;
@@ -22,13 +22,6 @@ public class UpdateTokenForm {
         return token;
     }
 
-    public DeviceOS getDeviceOS() {
-        return deviceOS;
-    }
-
-    public void setDeviceOS(DeviceOS deviceOS) {
-        this.deviceOS = deviceOS;
-    }
 
     public void setToken(String token) {
         this.token = token;

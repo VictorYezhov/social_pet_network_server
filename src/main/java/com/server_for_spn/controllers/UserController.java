@@ -68,7 +68,7 @@ public class UserController {
         }
 
         u.setFcmToken(updateTokenForm.getToken());
-        u.setDeviceOS(updateTokenForm.getDeviceOS());
+
 
         userService.update(u);
 
