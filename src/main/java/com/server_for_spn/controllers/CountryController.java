@@ -20,11 +20,12 @@ public class CountryController {
     private CountryService countryService;
 
 
-
-
+    /**
+     * Fetch all world countries from db
+     * @return
+     */
     @GetMapping("/api/loadCountryList")
     public List<CountryDTO> loadCountryList(){
-
         System.out.println("Load Countries Request");
         List<Country> countries = countryService.findAll();
         List<CountryDTO> countryDTOS = new ArrayList<>();
@@ -32,6 +33,7 @@ public class CountryController {
             countryDTOS.add(new CountryDTO(c.getId(), c.getCode(),c.getName()));
         }
         return countryDTOS;
+
     }
 
 

@@ -33,8 +33,6 @@ public class FriendshipController {
     @Autowired
     private FriendShipRequestService friendShipRequestService;
 
-
-
     @Autowired
     @Qualifier("friendshipRequestNotifier")
     private NotificationService friendshipRequestNotifier;
@@ -44,7 +42,14 @@ public class FriendshipController {
     private NotificationService acceptedFriendshipNotifier;
 
 
-
+    /**
+     * Add to friends Request functionality
+     * Send`s push notification to user whom request is addressed
+     * @param idFrom - requester id
+     * @param idTo - acceptor id
+     * @param authentication  spring provided authentication details
+     * @return
+     */
     @PostMapping("/newFriendShipRequest")
     private ResponseEntity<String> newFriendShipRequest(@RequestParam("from")Long idFrom,
                                                         @RequestParam("to") Long idTo,
@@ -76,7 +81,15 @@ public class FriendshipController {
     }
 
 
-
+    /**
+     * Acceptance of friendship function
+     * Sends push notification To requester of friendship
+     * @param acceptorId - person who confirms friendship
+     * @param requesterId - person  who requested friendship
+     * @param state - confirmation or rejection of friendship request
+     * @param authentication spring provided authentication details
+     * @return
+     */
 
     @PostMapping("/acceptFriendshipInvitation")
     private ResponseEntity<String> acceptFriendshipInvitation(@RequestParam("acceptor") Long acceptorId,

@@ -29,6 +29,11 @@ public class UserController {
     private UserService userService;
 
 
+    /**
+     * Registration of new Users
+     * @param registrationForm
+     * @return
+     */
     @PostMapping("/registration")
     public String registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
@@ -44,18 +49,17 @@ public class UserController {
     }
 
 
-
-
-    @PostMapping("/get_user_information")
-    public UserInformationForm sendUserInformation(@RequestBody String id){
-        System.out.println(id);
-        System.out.println(id.split(":")[1].split("\"")[1]);
-        User user = userService.findOne(Long.parseLong(id.split(":")[1].split("\"")[1]));
-        String place = user.getCity().getName().toString() + ", " + user.getCity().getCountry().getName().toString();
-        return new UserInformationForm(user.getPhoneNumber(), place, user.getEmail(), user.getName() + " " + user.getFamilyName());
-    }
-
-
+    /**
+     * We must update FCM token every time user login
+     * !! SO THIS METHOD MUST BE CALLED EVERY LOGIN ACTION !!!
+     * UpdateTokenForm contains Token and userId ENCODED IN BASE64 FORMAT WITH NO_WRAP flag :
+     * Encoder flag bit to omit all line terminators (i.e., the output
+     * will be on one long line).
+     * So we need to decode it first
+     * @param updateTokenForm
+     * @param authentication
+     * @return
+     */
     @PostMapping("/updateUsersToken")
     public ResponseEntity<String> updateToken(@RequestBody UpdateTokenForm updateTokenForm, Authentication authentication){
 

@@ -29,7 +29,10 @@ public class TestController {
     FCMService fcmService;
 
 
-
+    /**
+     * Only for some tests
+     * @return
+     */
     @GetMapping("/api/test")
     public String test(){
 

@@ -24,11 +24,21 @@ public class BreedController {
     private BreedService breedService;
 
 
+    /**
+     * Fetch petTypes from server
+     * @return
+     */
     @GetMapping("/api/getPetTypes")
     private PetType[] getAllPetTypes(){
         return PetType.values();
     }
 
+
+    /**
+     * Used to fetch breeds of specified pet type (cat, dog, etc)
+     * @param petType
+     * @return
+     */
     @GetMapping("/api/getBreedsForType")
     private List<BreedDTO> getAllBreadsForType(@RequestParam PetType petType){
         System.out.println("GET BREEDS FOR TYPE REQUEST");
