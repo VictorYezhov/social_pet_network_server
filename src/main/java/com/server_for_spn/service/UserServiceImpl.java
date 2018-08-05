@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -61,6 +62,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         userDAO.save(user);
+    }
+
+    @Override
+    public boolean checkExistenceById(Long Id) {
+        return userDAO.existsById(Id);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.server_for_spn.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.server_for_spn.enums.DeviceOS;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +22,18 @@ public class User {
     private String password;
     private String phoneNumber;
     private String Address;
+    @Enumerated
+    private DeviceOS deviceOS;
+
+    private String fcmToken;
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
 
     @ManyToOne
     @JoinColumn(name = "city_id")
@@ -28,6 +41,18 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Pet> petList;
+
+
+
+    @OneToMany(mappedBy = "side1", fetch = FetchType.LAZY)
+    private List<Friends> myFriends;
+
+    @OneToMany(mappedBy = "side2", fetch = FetchType.LAZY)
+    private List<Friends> meInFriends;
+
+
+
+
 
     public User() {
         petList = new ArrayList<>();
@@ -103,5 +128,30 @@ public class User {
 
     public void setPetList(List<Pet> petList) {
         this.petList = petList;
+    }
+
+    public List<Friends> getMyFriends() {
+        return myFriends;
+    }
+
+    public void setMyFriends(List<Friends> myFriends) {
+        this.myFriends = myFriends;
+    }
+
+    public List<Friends> getMeInFriends() {
+        return meInFriends;
+    }
+
+    public void setMeInFriends(List<Friends> meInFriends) {
+        this.meInFriends = meInFriends;
+    }
+
+
+    public DeviceOS getDeviceOS() {
+        return deviceOS;
+    }
+
+    public void setDeviceOS(DeviceOS deviceOS) {
+        this.deviceOS = deviceOS;
     }
 }

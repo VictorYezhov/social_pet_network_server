@@ -17,6 +17,8 @@ public interface UserService {
 
     void update(User user);
 
+    boolean checkExistenceById(Long Id);
+
     boolean checkExistence(String email, String password);
 
     String registration(RegistrationForm registrationForm);
