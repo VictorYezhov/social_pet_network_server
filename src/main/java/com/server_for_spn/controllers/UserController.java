@@ -1,11 +1,10 @@
 package com.server_for_spn.controllers;
 
 import com.google.gson.Gson;
-import com.server_for_spn.dto.RegistrationForm;
-import com.server_for_spn.dto.UpdateTokenForm;
-import com.server_for_spn.dto.UserInformationForm;
+import com.server_for_spn.dto.*;
 import com.server_for_spn.entity.FriendShipRequest;
 import com.server_for_spn.entity.Friends;
+import com.server_for_spn.entity.Pet;
 import com.server_for_spn.entity.User;
 import com.server_for_spn.service.FriendShipRequestService;
 import com.server_for_spn.service.FriendShipService;
@@ -18,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 /**
  * Created by Victor on 01.07.2018.
@@ -78,6 +79,41 @@ public class UserController {
         u.setFcmToken(updateTokenForm.getToken());
         userService.update(u);
         return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Getting all needed information after user login.
+     * @param id
+     * @param authentication
+     * @return
+     */
+    @PostMapping("/getAllInformationAboutUserAndPets")
+    public ResponseEntity<InformationOfUserAndHisPet> sendInfoToClient(@RequestBody Long id, Authentication authentication){
+        InformationOfUserAndHisPet info = new InformationOfUserAndHisPet();
+        User u = userService.findOne(id);
+        if(!authentication.getPrincipal().toString().equals(u.getEmail())){
+            return new ResponseEntity<>(info, HttpStatus.CONFLICT);
+
+        }
+
+        info.setName(u.getName());
+        info.setSurname(u.getFamilyName());
+        info.setPhone(u.getPhoneNumber());
+
+        CityDTO cityDTO = new CityDTO(u.getCity());
+
+        info.setCity(cityDTO);
+
+        List<PetDTO> petDTOList = new ArrayList<>();
+
+        for (Pet pet: u.getPetList()) {
+            PetDTO petDTO = new PetDTO(pet);
+            petDTOList.add(petDTO);
+        }
+
+        info.setPet(petDTOList);
+
+        return new ResponseEntity<>(info, HttpStatus.ACCEPTED);
     }
 
 }

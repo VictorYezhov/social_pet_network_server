@@ -8,7 +8,7 @@ import com.server_for_spn.enums.Sex;
 public class PetDTO {
     private Long id;
     private String name;
-    private Breed breed;
+    private BreedDTO breed;
     private Long age;
     private Sex sex;
     private String tagNumber;
@@ -19,7 +19,7 @@ public class PetDTO {
 
     }
 
-    public PetDTO(String name, Breed breed, Long age, Sex sex, String tagNumber, WeightDTO weight, Attitude attitude) {
+    public PetDTO(String name, BreedDTO breed, Long age, Sex sex, String tagNumber, WeightDTO weight, Attitude attitude) {
         this.name = name;
         this.breed = breed;
         this.age = age;
@@ -32,7 +32,10 @@ public class PetDTO {
     public PetDTO(Pet pet){
         this.id = pet.getId();
         this.name = pet.getName();
-        this.breed = pet.getBreed();
+
+        BreedDTO breedDTO = new BreedDTO(pet.getBreed());
+
+        this.breed = breedDTO;
         this.age = pet.getAge();
         this.sex = pet.getSex();
         this.tagNumber = pet.getTagNumber();
@@ -62,11 +65,11 @@ public class PetDTO {
         this.name = name;
     }
 
-    public Breed getBreed() {
+    public BreedDTO getBreed() {
         return breed;
     }
 
-    public void setBreed(Breed breed) {
+    public void setBreed(BreedDTO breed) {
         this.breed = breed;
     }
 

@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private WeightService weightService;
 
+    @Autowired
+    private BreedService breedService;
+
 
     @Override
     public void save(User user) {
@@ -120,11 +123,20 @@ public class UserServiceImpl implements UserService {
             weightService.save(weight);
         }
 
+        Breed breed = breedService.findOne(registrationForm.getPet().getBreed().getId());
+
         Pet pet = new Pet(registrationForm.getPet());
+        pet.setBreed(breed);
         pet.setWeight(weight);
+
         List<Pet> petsOfWeight = weight.getPetList();
         petsOfWeight.add(pet);
         weightService.update(weight);
+
+        List<Pet> petsOfBreed = breed.getPetList();
+        petsOfBreed.add(pet);
+        breedService.update(breed);
+
         userDAO.save(user);
         pet.setUser(user);
         user.getPetList().add(pet);

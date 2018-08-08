@@ -1,5 +1,7 @@
 package com.server_for_spn.dto;
 
+import com.server_for_spn.entity.City;
+
 public class CityDTO {
 
     private Long id;
@@ -8,6 +10,14 @@ public class CityDTO {
 
     public CityDTO(){
 
+    }
+
+    public CityDTO(City city){
+        this.id = city.getId();
+        this.name = city.getName();
+
+        CountryDTO countryDTO = new CountryDTO(city.getCountry());
+        this.country = countryDTO;
     }
 
     public CityDTO(String name, CountryDTO country) {

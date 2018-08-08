@@ -43,7 +43,7 @@ public class Pet {
     public Pet(PetDTO petDTO) {
         this.name = petDTO.getName();
         this.age = petDTO.getAge();
-        this.breed = petDTO.getBreed();
+        //this.breed = petDTO.getBreed();
         this.sex = petDTO.getSex();
         //this.weight = petDTO.getWeight();
         //this.user = user;
