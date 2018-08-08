@@ -85,22 +85,6 @@ public class UserServiceImpl implements UserService {
 
         if(checkExistence(registrationForm.getEmail(), registrationForm.getPassword())){
 
-//            User user = userDAO.findFirstByEmail(registrationForm.getEmail());
-//            List<Pet> petList = user.getPetList();
-//
-//            for (Pet p:
-//                 petList) {
-//                System.out.println(p.getId());
-//            }
-//
-//            Pet pet = new Pet(registrationForm.getPet());
-//            petService.save(pet);
-//            Pet petReadyToSave = petService.findOneByTagNumber(registrationForm.getPet().getTagNumber());
-//            petReadyToSave.setUser(user);
-//
-//            petList.add(petReadyToSave);
-//            petService.update(petReadyToSave);
-//            userDAO.save(user);
 
             //TODO do smth
 
@@ -136,8 +120,6 @@ public class UserServiceImpl implements UserService {
             weightService.save(weight);
         }
 
-
-
         Pet pet = new Pet(registrationForm.getPet());
         pet.setWeight(weight);
         List<Pet> petsOfWeight = weight.getPetList();
@@ -149,7 +131,6 @@ public class UserServiceImpl implements UserService {
         petService.save(pet);
         userDAO.save(user);
         weightService.update(weight);
-
 
         return "You have been registered!";
     }

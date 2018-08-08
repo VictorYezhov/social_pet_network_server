@@ -1,5 +1,6 @@
 package com.server_for_spn.controllers;
 
+import com.google.gson.Gson;
 import com.server_for_spn.dto.RegistrationForm;
 import com.server_for_spn.dto.UpdateTokenForm;
 import com.server_for_spn.dto.UserInformationForm;
@@ -38,6 +39,9 @@ public class UserController {
     public String registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
             return "NULL";
+        Gson gson = new Gson();
+        String jsonInString = gson.toJson(registrationForm);
+        System.out.println(jsonInString);
         userService.registration(registrationForm);
         return "OK";
     }
@@ -72,13 +76,8 @@ public class UserController {
         }
 
         u.setFcmToken(updateTokenForm.getToken());
-
-
         userService.update(u);
-
         return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
-
-
     }
 
 }
