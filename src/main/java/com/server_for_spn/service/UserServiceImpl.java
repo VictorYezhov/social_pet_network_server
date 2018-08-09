@@ -87,10 +87,7 @@ public class UserServiceImpl implements UserService {
         registrationForm.setPassword(bCryptPasswordEncoder.encode(registrationForm.getPassword()));
 
         if(checkExistence(registrationForm.getEmail(), registrationForm.getPassword())){
-
-
-            //TODO do smth
-
+            //TODO do smt
             return "User with such email and password already exists";
         }
 

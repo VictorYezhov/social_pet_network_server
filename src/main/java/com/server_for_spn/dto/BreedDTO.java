@@ -14,6 +14,9 @@ public class BreedDTO {
 
     private String name;
 
+    public BreedDTO() {
+    }
+
     public BreedDTO(Breed breed) {
         id = breed.getId();
         type = breed.getType();
