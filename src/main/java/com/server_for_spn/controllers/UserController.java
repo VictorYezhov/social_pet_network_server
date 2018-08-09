@@ -37,14 +37,11 @@ public class UserController {
      * @return
      */
     @PostMapping("/registration")
-    public String registration(@RequestBody RegistrationForm registrationForm){
+    public ResponseEntity<String> registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
-            return "NULL";
-        Gson gson = new Gson();
-        String jsonInString = gson.toJson(registrationForm);
-        System.out.println(jsonInString);
+            return new ResponseEntity<>( "registrationForm is null", HttpStatus.BAD_REQUEST);;
         userService.registration(registrationForm);
-        return "OK";
+        return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
     }
 
 
