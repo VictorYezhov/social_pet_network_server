@@ -128,6 +128,7 @@ public class UserController {
         System.out.println("USER: "+u.getEmail()+" ONLINE");
         if(u.getEmail().equals(authentication.getPrincipal().toString())){
             u.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
+            userService.save(u);
             return new ResponseEntity<>("OK", HttpStatus.OK);
         }
         return new ResponseEntity<>("BAD", HttpStatus.BAD_REQUEST);
