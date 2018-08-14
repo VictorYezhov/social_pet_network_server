@@ -134,4 +134,14 @@ public class UserController {
         return new ResponseEntity<>("BAD", HttpStatus.BAD_REQUEST);
     }
 
+
+    @PostMapping("/getInformationOfAnotherUser")
+    public ResponseEntity<UserInfo> sendInfoAboutAnotherUser(@RequestParam("id") Long id){
+
+        User user = userService.findOne(id);
+        UserInfo userInfo = new UserInfo(user);
+
+        return new ResponseEntity<UserInfo>(userInfo, HttpStatus.ACCEPTED);
+    }
+
 }

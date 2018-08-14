@@ -144,6 +144,9 @@ public class FriendshipController {
             }
             friendsInfo.add(info);
         }
+
+        System.out.println("OK");
+
         return new ResponseEntity<>(friendsInfo, HttpStatus.OK);
     }
 

@@ -2,7 +2,7 @@ package com.server_for_spn.controllers;
 
 
 import com.google.api.services.storage.Storage;
-import com.server_for_spn.dao.TestDAO;
+
 import com.server_for_spn.dto.RegistrationForm;
 import com.server_for_spn.entity.Breed;
 import com.server_for_spn.entity.TestEntity;
@@ -38,8 +38,6 @@ public class TestController {
     @Autowired
     FCMService fcmService;
 
-    @Autowired
-    TestDAO  testDAO;
 
 
     /**
