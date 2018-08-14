@@ -16,12 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import sun.rmi.runtime.Log;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Victor on 01.07.2018.
@@ -70,7 +72,6 @@ public class UserController {
         updateTokenForm.setId(new String(Base64.getDecoder().decode(updateTokenForm.getId())));
         updateTokenForm.setToken(new String(Base64.getDecoder().decode(updateTokenForm.getToken())));
         User u = userService.findOne(Long.decode(updateTokenForm.getId()));
-        u.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
         System.out.println("NEW TOKEN: "+updateTokenForm.getToken());
         if(!authentication.getPrincipal().toString().equals(u.getEmail())){
             return new ResponseEntity<>("CONFLICT", HttpStatus.CONFLICT);
@@ -123,13 +124,13 @@ public class UserController {
     public ResponseEntity<String>  online(@RequestParam("id")Long id,
                                           Authentication authentication){
 
-
         User u = userService.findOne(id);
-
+        System.out.println("USER: "+u.getEmail()+" ONLINE");
         if(u.getEmail().equals(authentication.getPrincipal().toString())){
             u.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
+            return new ResponseEntity<>("OK", HttpStatus.OK);
         }
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("BAD", HttpStatus.BAD_REQUEST);
     }
 
 }

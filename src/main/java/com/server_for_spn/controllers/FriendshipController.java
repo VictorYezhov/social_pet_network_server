@@ -108,7 +108,6 @@ public class FriendshipController {
                 return new ResponseEntity<>( "CONFLICT", HttpStatus.CONFLICT);
             }
             User requester = userService.findOne(friendShipRequest.getRequesterId());
-            acceptor.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
             Friends friends = new Friends();
             friends.setSide1(acceptor);
             friends.setSide2(requester);
