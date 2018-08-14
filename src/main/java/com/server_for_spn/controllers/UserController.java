@@ -17,8 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,6 +70,7 @@ public class UserController {
         updateTokenForm.setId(new String(Base64.getDecoder().decode(updateTokenForm.getId())));
         updateTokenForm.setToken(new String(Base64.getDecoder().decode(updateTokenForm.getToken())));
         User u = userService.findOne(Long.decode(updateTokenForm.getId()));
+        u.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
         System.out.println("NEW TOKEN: "+updateTokenForm.getToken());
         if(!authentication.getPrincipal().toString().equals(u.getEmail())){
             return new ResponseEntity<>("CONFLICT", HttpStatus.CONFLICT);
@@ -92,6 +95,7 @@ public class UserController {
             return new ResponseEntity<>(info, HttpStatus.CONFLICT);
 
         }
+        u.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
 
         info.setName(u.getName());
         info.setSurname(u.getFamilyName());

@@ -25,6 +25,12 @@ public class User {
 
     private String fcmToken;
 
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL,
+            mappedBy = "user")
+    private UserState UserState;
+
+
     public String getFcmToken() {
         return fcmToken;
     }
@@ -145,11 +151,11 @@ public class User {
     }
 
 
-    
-    
-    
+    public com.server_for_spn.entity.UserState getUserState() {
+        return UserState;
+    }
 
-    
-    
-    
+    public void setUserState(com.server_for_spn.entity.UserState userState) {
+        UserState = userState;
+    }
 }

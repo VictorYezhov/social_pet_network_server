@@ -1,6 +1,7 @@
 package com.server_for_spn.service;
 
 import com.server_for_spn.dao.UserDAO;
+import com.server_for_spn.dao.UserStateDAO;
 import com.server_for_spn.dto.PetDTO;
 import com.server_for_spn.dto.RegistrationForm;
 import com.server_for_spn.entity.*;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private UserStateDAO userStateDAO;
 
     @Autowired
     private CountryService countryService;
@@ -140,6 +144,10 @@ public class UserServiceImpl implements UserService {
         petService.save(pet);
         userDAO.save(user);
         weightService.update(weight);
+        UserState userState = new UserState();
+        userState.setUser(user);
+        userState.setCurrentPetChoose(pet.getId());
+        userStateDAO.save(userState);
 
         return "You have been registered!";
     }

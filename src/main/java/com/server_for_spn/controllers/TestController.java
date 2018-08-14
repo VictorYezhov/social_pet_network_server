@@ -1,11 +1,20 @@
 package com.server_for_spn.controllers;
 
+
+import com.google.api.services.storage.Storage;
+import com.server_for_spn.dao.TestDAO;
 import com.server_for_spn.dto.RegistrationForm;
 import com.server_for_spn.entity.Breed;
+import com.server_for_spn.entity.TestEntity;
 import com.server_for_spn.enums.NotificationType;
 import com.server_for_spn.enums.PetType;
 import com.server_for_spn.service.BreedService;
 import com.server_for_spn.service.FCMService;
+
+import org.apache.ignite.Ignite;
+import org.apache.ignite.IgniteCache;
+import org.apache.ignite.Ignition;
+import org.apache.ignite.cache.CacheEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -28,45 +38,68 @@ public class TestController {
     @Autowired
     FCMService fcmService;
 
+    @Autowired
+    TestDAO  testDAO;
+
 
     /**
      * Only for some tests
      * @return
      */
-    @PostMapping("/api/test")
-    public String test(@RequestBody RegistrationForm registrationForm){
+    @GetMapping("/api/test")
+    public  Map<Long, TestEntity> test(){
+
+        StringBuilder builder = new StringBuilder();
 
 
-        System.out.println(registrationForm);
-//        try {
-//            fcmService.sendPersonalMessage("ch1WKeFk0Sk:APA91bF-runA04BnxHTrHpxaDnr71ycitRY2_O4slzGy0rPBE540OR3tJHyvgxHr4nUMqkYDjGTHxvu3qEmseG2-Bl8zEsB6WmXHIKh6g558hkq80_QeY75YIxSYjdyc04caBSctWvixhIu2tJz8vzCV89Mnvkz9LA",
-//                    "1", NotificationType.FRIEDSHIPREQUEST);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//        boolean flag = true;
-//        try (BufferedReader br = new BufferedReader(new FileReader("dog_breeds.txt"))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                if(flag) {
-//                    Breed breed = new Breed();
-//                    breed.setName(line);
-//                    breed.setType(PetType.DOG);
-//                    breedService.save(breed);
-//                    System.out.println(line);
-//                    flag = false;
-//                }else {
-//                    flag = true;
-//                }
-//            }
-//        }catch (FileNotFoundException e){
-//            return "FILE NOT FOUND";
-//        }catch (IOException e){
-//            return "IOEXEPTION";
-//        }
-        return breedService.findAll().toString();
+
+
+        Ignite ignite = Ignition.start();
+        IgniteCache<Long, TestEntity > region = ignite.getOrCreateCache("myCache");
+
+
+        List<TestEntity> testEntities = new ArrayList<>();
+        for(int i =0; i< 1000; i++){
+            TestEntity testEntity = new TestEntity();
+            testEntity.setId((long)i);
+            testEntity.setText("text"+i);
+            testEntities.add(testEntity);
+        }
+        int i=0;
+
+        long timeInputStartInMemory = System.currentTimeMillis();
+        Set<Long> ids = new HashSet<>();
+        for (TestEntity r:testEntities
+             ) {
+            ids.add(r.getId());
+            region.put(r.getId(), r);
+        }
+        long timeInputEndInMemory = System.currentTimeMillis();
+
+
+
+        long timeGettingOneInMemoryStart = System.currentTimeMillis();
+
+
+        long timeGettingOneInMemoryEnd = System.currentTimeMillis();
+
+
+        TestEntity str = region.get(456L);
+
+
+        Map<Long, TestEntity> test =  region.getAll(ids);
+
+
+
+       System.out.println(str);
+
+
+
+
+
+
+
+        return test;
     }
 
 
