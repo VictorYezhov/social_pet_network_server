@@ -158,4 +158,14 @@ public class User {
     public void setUserState(com.server_for_spn.entity.UserState userState) {
         UserState = userState;
     }
+
+    public List<Friends> getFriends(){
+        List<Friends> friends = new ArrayList<>();
+        friends.addAll(myFriends);
+        friends.addAll(meInFriends);
+        return friends;
+    }
+
+
+
 }

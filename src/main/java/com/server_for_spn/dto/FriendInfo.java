@@ -66,4 +66,30 @@ public class FriendInfo {
     public void setLastActiveTime(Timestamp lastActiveTime) {
         this.lastActiveTime = lastActiveTime;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FriendInfo)) return false;
+
+        FriendInfo that = (FriendInfo) o;
+
+        if (!getId().equals(that.getId())) return false;
+        if (!getName().equals(that.getName())) return false;
+        if (!getSurname().equals(that.getSurname())) return false;
+        if (!getPetName().equals(that.getPetName())) return false;
+        if (!getPetBreedName().equals(that.getPetBreedName())) return false;
+        return getLastActiveTime().equals(that.getLastActiveTime());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + getSurname().hashCode();
+        result = 31 * result + getPetName().hashCode();
+        result = 31 * result + getPetBreedName().hashCode();
+        result = 31 * result + getLastActiveTime().hashCode();
+        return result;
+    }
 }

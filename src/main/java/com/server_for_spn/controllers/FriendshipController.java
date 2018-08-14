@@ -123,18 +123,15 @@ public class FriendshipController {
 
     @PostMapping("/getUsersFriends")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private ResponseEntity<List<FriendInfo>> getUsetFriendsInfo(@RequestParam("id")Long id,
+    private ResponseEntity<Set<FriendInfo>> getUsetFriendsInfo(@RequestParam("id")Long id,
                                                                Authentication authentication){
         User requester = userService.findOne(id);
         if(!requester.getEmail().equals(authentication.getPrincipal().toString())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        List<FriendInfo> friendsInfo = new ArrayList<>();
-
-
+        Set<FriendInfo> friendsInfo = new HashSet<>();
         FriendInfo info;
-        for (Friends f: requester.getMyFriends()) {
+        for (Friends f: requester.getFriends()) {
             info = new FriendInfo();
             User friend = getFriend(f, requester);
             info.setName(friend.getName());
@@ -146,10 +143,8 @@ public class FriendshipController {
                 info.setPetName(pet.getName());
                 info.setPetBreedName(pet.getBreed().getName());
             }
-
             friendsInfo.add(info);
         }
-
         return new ResponseEntity<>(friendsInfo, HttpStatus.OK);
     }
 
