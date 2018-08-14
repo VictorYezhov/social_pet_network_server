@@ -13,7 +13,7 @@ public class FriendInfo {
     private String name;
     private String surname;
     private String petName;
-    private String PetBreedName;
+    private String petBreedName;
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Timestamp lastActiveTime;
@@ -52,11 +52,11 @@ public class FriendInfo {
     }
 
     public String getPetBreedName() {
-        return PetBreedName;
+        return petBreedName;
     }
 
     public void setPetBreedName(String petBreedName) {
-        PetBreedName = petBreedName;
+        this.petBreedName = petBreedName;
     }
 
     public Timestamp getLastActiveTime() {

@@ -117,4 +117,19 @@ public class UserController {
         return new ResponseEntity<>(info, HttpStatus.ACCEPTED);
     }
 
+
+
+    @PostMapping("/online")
+    public ResponseEntity<String>  online(@RequestParam("id")Long id,
+                                          Authentication authentication){
+
+
+        User u = userService.findOne(id);
+
+        if(u.getEmail().equals(authentication.getPrincipal().toString())){
+            u.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
+        }
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
 }
