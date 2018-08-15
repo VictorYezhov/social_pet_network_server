@@ -74,4 +74,5 @@ public class InfoAboutUserFriendShipRequest {
     public void setPetBreed(String petBreed) {
         this.petBreed = petBreed;
     }
+
 }
