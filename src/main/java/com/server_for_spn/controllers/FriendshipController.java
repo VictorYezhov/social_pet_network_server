@@ -5,7 +5,7 @@ import com.server_for_spn.dto.FriendInfo;
 import com.server_for_spn.entity.*;
 import com.server_for_spn.service.FriendShipRequestService;
 import com.server_for_spn.service.FriendShipService;
-import com.server_for_spn.service.NotificationService;
+import com.server_for_spn.fcm_notifications.NotificationService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.jws.soap.SOAPBinding;
 import java.sql.Timestamp;
 import java.util.*;
 

@@ -1,29 +1,19 @@
 package com.server_for_spn.controllers;
 
-import com.google.gson.Gson;
 import com.server_for_spn.dto.*;
-import com.server_for_spn.entity.FriendShipRequest;
-import com.server_for_spn.entity.Friends;
 import com.server_for_spn.entity.Pet;
 import com.server_for_spn.entity.User;
-import com.server_for_spn.service.FriendShipRequestService;
-import com.server_for_spn.service.FriendShipService;
-import com.server_for_spn.service.NotificationService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import sun.rmi.runtime.Log;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by Victor on 01.07.2018.

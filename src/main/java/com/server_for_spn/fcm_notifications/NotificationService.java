@@ -1,4 +1,4 @@
-package com.server_for_spn.service;
+package com.server_for_spn.fcm_notifications;
 
 import com.server_for_spn.entity.User;
 
