@@ -3,6 +3,8 @@ package com.server_for_spn.entity;
 
 
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,10 @@ public class User {
             cascade =  CascadeType.ALL,
             mappedBy = "user")
     private UserState UserState;
+
+
+    @Transient
+    public   transient Object additionalField;
 
 
     public String getFcmToken() {

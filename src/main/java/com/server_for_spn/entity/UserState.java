@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by Victor on 14.08.2018.
@@ -25,7 +24,6 @@ public class UserState {
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Timestamp lastActiveTime;
-
     private Long currentPetChoose;
 
 

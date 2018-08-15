@@ -2,6 +2,7 @@ package com.server_for_spn.controllers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.server_for_spn.dto.FriendInfo;
+import com.server_for_spn.dto.InfoAboutUserFriendShipRequest;
 import com.server_for_spn.entity.*;
 import com.server_for_spn.service.FriendShipRequestService;
 import com.server_for_spn.service.FriendShipService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,7 +65,7 @@ public class FriendshipController {
         }
 
         User userFrom = userService.findOne(idFrom);
-        userFrom.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
+
         if(!userFrom.getEmail().equals(authentication.getPrincipal().toString())){
             return new ResponseEntity<>("CONFLICT", HttpStatus.CONFLICT);
         }
@@ -78,11 +80,44 @@ public class FriendshipController {
             friendShipRequest.setRequesterId(userFrom.getId());
             friendShipRequest.setAcceptorId(userTo.getId());
             friendShipRequestService.save(friendShipRequest);
+            userTo.additionalField = friendShipRequest.getId();
             friendshipRequestNotifier.sendNotification(userFrom,userTo);
             return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>("CONFLICT", HttpStatus.CONFLICT);
     }
+
+    @PostMapping("/persist")
+    public ResponseEntity<String> persisted(@RequestParam("requestId") Long id,
+                                            @RequestParam("userID") Long userId,
+                                            Authentication authentication){
+        User requester = userService.findOne(userId);
+        if(!authentication.getPrincipal().toString().equals(requester.getEmail())){
+            return new ResponseEntity<>("BAD",HttpStatus.BAD_REQUEST);
+        }
+        FriendShipRequest friendShipRequest = friendShipRequestService.findOne(id);
+
+        if(!requester.getId().equals(friendShipRequest.getAcceptorId())){
+            return new ResponseEntity<>("BAD",HttpStatus.BAD_REQUEST);
+        }
+        friendShipRequest.setPersistedOnClientSide(true);
+        friendShipRequestService.update(friendShipRequest);
+
+        return new ResponseEntity<>("OK",HttpStatus.OK);
+    }
+
+    @PostMapping("/getUnPersistentFriendShipRequests")
+    public ResponseEntity<List<InfoAboutUserFriendShipRequest>> getUnPersistentFriendShipRequests(@RequestParam("id") Long id,
+                                                                                                  Authentication authentication){
+        User u = userService.findOne(id);
+        if(!u.getEmail().equals(authentication.getPrincipal().toString())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<FriendShipRequest> requests = friendShipRequestService.findAllForAcceptor(id);
+        return new ResponseEntity<>(convertToInfoAboutUserFriendShipRequest(requests), HttpStatus.OK);
+    }
+
+
 
 
     /**
@@ -96,7 +131,7 @@ public class FriendshipController {
      */
 
     @PostMapping("/acceptFriendshipInvitation")
-    private ResponseEntity<String> acceptFriendshipInvitation(@RequestParam("acceptor") Long acceptorId,
+    public ResponseEntity<String> acceptFriendshipInvitation(@RequestParam("acceptor") Long acceptorId,
                                                               @RequestParam("requester")Long requesterId,
                                                               @RequestParam("state") boolean state,
                                                               Authentication authentication){
@@ -121,7 +156,7 @@ public class FriendshipController {
 
     @PostMapping("/getUsersFriends")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private ResponseEntity<Set<FriendInfo>> getUsetFriendsInfo(@RequestParam("id")Long id,
+    public ResponseEntity<Set<FriendInfo>> getUsetFriendsInfo(@RequestParam("id")Long id,
                                                                Authentication authentication){
         User requester = userService.findOne(id);
         if(!requester.getEmail().equals(authentication.getPrincipal().toString())){
@@ -170,6 +205,45 @@ public class FriendshipController {
         return null;
     }
 
+    private List<InfoAboutUserFriendShipRequest> convertToInfoAboutUserFriendShipRequest(List<FriendShipRequest> requests){
+
+        List<InfoAboutUserFriendShipRequest> infoAboutUserFriendShipRequests = new ArrayList<>();
+        for (FriendShipRequest f:
+             requests) {
+            User requester = userService.findOne(f.getRequesterId());
+            InfoAboutUserFriendShipRequest info = new InfoAboutUserFriendShipRequest();
+            info.setId(requester.getId());
+            info.setName(requester.getName());
+            info.setSurname(requester.getFamilyName());
+            info.setCity(requester.getCity().getName());
+            info.setCountry(requester.getCity().getCountry().getName());
+
+            Pet userPet = null;
+            for (Pet p:
+                    requester.getPetList()) {
+                if(p.getId().equals(requester.getUserState().getCurrentPetChoose())){
+                    userPet = p;
+                }
+            }
+            String petName;
+            String petBreed;
+            if(userPet == null){
+                petName ="Not Set";
+                petBreed = "Not Set";
+            }else {
+                petName = userPet.getName();
+                petBreed = userPet.getBreed().getName();
+            }
+
+            info.setPetName(petName);
+            info.setPetBreed(petBreed);
+            info.setRequestId(f.getId());
+            infoAboutUserFriendShipRequests.add(info);
+
+        }
+        return infoAboutUserFriendShipRequests;
+
+    }
 
 
 

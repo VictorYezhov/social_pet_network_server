@@ -2,12 +2,24 @@ package com.server_for_spn.dto;
 
 public class InfoAboutUserFriendShipRequest {
     private Long id;
+    private Long requestId;
     private String name;
     private String surname;
     private String city;
     private String country;
     private String petName;
     private String petBreed;
+
+    public Long getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
+    }
+
+    public InfoAboutUserFriendShipRequest() {
+    }
 
     public InfoAboutUserFriendShipRequest(Long id, String name, String surname, String city, String country, String petName, String petBreed) {
         this.id = id;

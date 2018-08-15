@@ -22,6 +22,8 @@ public class FriendShipRequest {
 
     private Long acceptorId;
 
+    private boolean persistedOnClientSide;
+
 
     public Long getId() {
         return id;
@@ -47,4 +49,11 @@ public class FriendShipRequest {
         this.acceptorId = acceptorId;
     }
 
+    public boolean isPersistedOnClientSide() {
+        return persistedOnClientSide;
+    }
+
+    public void setPersistedOnClientSide(boolean persistedOnClientSide) {
+        this.persistedOnClientSide = persistedOnClientSide;
+    }
 }

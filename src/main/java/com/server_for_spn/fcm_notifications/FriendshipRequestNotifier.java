@@ -57,6 +57,7 @@ public class FriendshipRequestNotifier implements NotificationService {
         Message message = Message.builder().setToken(to.getFcmToken())
                 .putData("type", notificationType.name())
                 .putData("id", from.getId().toString())
+                .putData("requestId", to.additionalField.toString())
                 .putData("name", from.getName())
                 .putData("surname",from.getFamilyName())
                 .putData("city", from.getCity().getName())

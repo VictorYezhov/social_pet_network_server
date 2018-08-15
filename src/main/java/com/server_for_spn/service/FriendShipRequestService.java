@@ -39,6 +39,10 @@ public class FriendShipRequestService {
         requestDAO.save(request);
     }
 
+    public List<FriendShipRequest> findAllForAcceptor(Long acceptorId){
+        return requestDAO.findAllByAcceptorIdAndPersistedOnClientSide(acceptorId, false);
+    }
+
     public FriendShipRequest findByAcceptorAndRequester(Long acceptor, Long requester){
 
 
