@@ -245,6 +245,19 @@ public class FriendshipController {
 
     }
 
+    @PostMapping("/allFriendshipRequestsIsDeletedFromCache")
+    private ResponseEntity<String> changePersistingOnClientSide(@RequestParam("id") Long id){
+        List<FriendShipRequest> friendShipRequestList = friendShipRequestService.findAllByAcceptorId(id);
+
+        for (FriendShipRequest friendshiprequest:
+             friendShipRequestList) {
+            friendshiprequest.setPersistedOnClientSide(false);
+            friendShipRequestService.update(friendshiprequest);
+        }
+
+        return new ResponseEntity<>("Ok", HttpStatus.ACCEPTED);
+    }
+
 
 
 }

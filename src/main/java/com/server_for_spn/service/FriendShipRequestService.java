@@ -57,6 +57,10 @@ public class FriendShipRequestService {
         return f != null;
     }
 
+    public List<FriendShipRequest> findAllByAcceptorId(Long id){
+        return requestDAO.findAllByAcceptorId(id);
+    }
+
 
 
 }
