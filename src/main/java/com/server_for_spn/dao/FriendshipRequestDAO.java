@@ -11,6 +11,7 @@ import java.util.List;
 public interface FriendshipRequestDAO extends JpaRepository<FriendShipRequest, Long> {
     FriendShipRequest findByAcceptorIdAndRequesterId(Long accepterId, Long requesterId);
     List<FriendShipRequest> findAllByAcceptorIdAndPersistedOnClientSide(Long acceptorId, boolean _false);
+    List<FriendShipRequest> findAllByAcceptorId(Long acceptorId);
 
 
 }
