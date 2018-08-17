@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by Victor on 10.08.2018.
  */
 @Entity
-public class TestEntity {
+public class TestEntity implements Serializable{
 
 
     @Id

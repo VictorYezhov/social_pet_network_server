@@ -1,7 +1,9 @@
 package com.server_for_spn.controllers;
 
 import com.server_for_spn.entity.User;
-import com.server_for_spn.lockationServises.UserAddress;
+import com.server_for_spn.lockationServises.LocationService;
+import com.server_for_spn.lockationServises.models.LocationResponse;
+import com.server_for_spn.lockationServises.models.UserAddress;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class LocationController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    private LocationService locationService;
+
 
 
     @PostMapping("/updateUserPosition")
@@ -29,15 +34,15 @@ public class LocationController {
                                                 @RequestParam("id") Long id,
                                                 Authentication authentication){
         User user = userService.findOne(id);
-
         if(!user.getEmail().equals(authentication.getPrincipal().toString())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        System.out.println(userAddress);
+        userAddress.setUserId(id);
+        LocationResponse locationResponse = locationService.saveLocation(userAddress);
+        System.out.println("RESPONSE: "+locationResponse.getMessage());
+        System.out.println(locationService.realTimeSnapShoot());
         System.out.println("-------------------------------------------------------------------------");
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
 
