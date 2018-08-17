@@ -1,8 +1,7 @@
 package com.server_for_spn.controllers;
 
 import com.server_for_spn.dto.*;
-import com.server_for_spn.entity.Pet;
-import com.server_for_spn.entity.User;
+import com.server_for_spn.entity.*;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -132,6 +131,33 @@ public class UserController {
         UserInfo userInfo = new UserInfo(user);
 
         return new ResponseEntity<UserInfo>(userInfo, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/getAllContactsOfCurrentUser")
+    public List<Contact> getAllContactsOfCurrentUser(@RequestParam("id") Long id){
+        List<Contact> contacts = new ArrayList<>();
+        User user = userService.findOne(id);
+        List<Friends> friends = user.getFriends();
+        for (Friends f: friends) {
+            Contact c;
+            if(!f.getSide1().getId().equals(id)){
+                c = new Contact(f.getSide1());
+            }else{
+                c = new Contact(f.getSide2());
+            }
+
+            try {
+                Message m = f.getMessages().get(f.getMessages().size() - 1);
+                c.setLastMessage(m.getMessageText());
+                c.setTimestamp(m.getTimestamp());
+            }catch (ArrayIndexOutOfBoundsException e){
+                c.setLastMessage("no messages");
+            }
+
+            contacts.add(c);
+        }
+
+        return contacts;
     }
 
 }

@@ -1,8 +1,11 @@
 package com.server_for_spn.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Victor on 05.08.2018.
@@ -20,6 +23,9 @@ public class Friends {
 
     @ManyToOne
     private User side2;
+
+    @OneToMany(mappedBy = "friends", fetch = FetchType.LAZY)
+    private List<Message> messages;
 
     public Long getId() {
         return id;
@@ -43,5 +49,13 @@ public class Friends {
 
     public void setSide2(User side2) {
         this.side2 = side2;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }
