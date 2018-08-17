@@ -1,7 +1,6 @@
 package com.server_for_spn.entity;
 
 import com.server_for_spn.dto.MessageDTO;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 
