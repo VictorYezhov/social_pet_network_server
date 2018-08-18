@@ -1,6 +1,7 @@
 package com.server_for_spn.service;
 
 import com.server_for_spn.dao.MessageDAO;
+import com.server_for_spn.entity.Friends;
 import com.server_for_spn.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,10 @@ public class MessageServiceImpl implements MessageService{
     @Override
     public void update(Message message) {
         messageDAO.save(message);
+    }
+
+    @Override
+    public List<Message> findAllUnreadMessages(Long id) {
+        return messageDAO.findMessagesByFriendsAndRead(id);
     }
 }

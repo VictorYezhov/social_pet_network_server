@@ -89,10 +89,14 @@ public class MessageController {
     @PostMapping("/makeLastMessageRead")
     public String makeMessageRead(@RequestParam("friends_id") Long id){
         Friends friends = friendShipService.findOne(id);
-        List<Message> messages = friends.getMessages();
-        Message message = messages.get(messages.size() - 1);
-        message.setRead(true);
-        messageService.update(message);
+        List<Message> messages = messageService.findAllUnreadMessages(friends.getId());
+
+        for (Message message:
+                messages) {
+            message.setRead(true);
+            messageService.update(message);
+        }
+
         return "Ok";
     }
 }
