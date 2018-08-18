@@ -4,9 +4,12 @@ import com.server_for_spn.dao.FriendsDAO;
 import com.server_for_spn.dto.MessageDTO;
 import com.server_for_spn.entity.Friends;
 import com.server_for_spn.entity.Message;
+import com.server_for_spn.entity.User;
+import com.server_for_spn.fcm_notifications.NotificationService;
 import com.server_for_spn.service.MessageService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +30,10 @@ public class MessageController {
 
     @Autowired
     private FriendsDAO friendsDAO;
+
+    @Autowired
+    @Qualifier("messageNotifier")
+    private NotificationService messageNotifier;
 
     @PostMapping("/getAllMessages")
     public List<MessageDTO> sendAllMessageOfCurrentPeople(@RequestParam("user_id") Long user1,
@@ -54,10 +61,12 @@ public class MessageController {
                                   @RequestParam("time") Long time){
         Message message = new Message(messageDTO);
 
-        Friends friends = friendsDAO.findBySide1AndSide2(userService.findOne(id),userService.findOne(messageDTO.getUser_to()));
+        User user = userService.findOne(id);
+        User friend = userService.findOne(messageDTO.getUser_to());
+        Friends friends = friendsDAO.findBySide1AndSide2(user,friend);
 
         if(friends == null){
-            friends = friendsDAO.findBySide1AndSide2(userService.findOne(messageDTO.getUser_to()),userService.findOne(id));
+            friends = friendsDAO.findBySide1AndSide2(friend,user);
         }
 
         message.setFriends(friends);
@@ -65,6 +74,10 @@ public class MessageController {
         message.setTimestamp(new Timestamp(time));
 
         messageService.save(message);
+
+        user.additionalField = message.getMessageText();
+        friend.additionalField = friends.getId();
+        messageNotifier.sendNotification(user, friend);
 
         return "Ok";
     }
