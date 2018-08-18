@@ -37,6 +37,7 @@ public class LocationService {
 
     public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress){
         if(countries.containsKey(userAddress.getmCountryCode())){
+            System.out.println("Getting users From: "+userAddress.getmCountryCode());
             return countries.get(userAddress.getmCountryCode()).getUsersNearMe(userAddress);
         }
         Locator locator = new CountryLevelLocator(userAddress.getmCountryName());

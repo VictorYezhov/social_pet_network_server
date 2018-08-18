@@ -44,8 +44,12 @@ public class SubAdminAreaLocator extends AbstractLocator implements Locator {
     @Override
     public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
         Locator locator = subLocators.get(userAddress.getmLocality());
-        if(locator != null)
+        if(locator != null){
+            System.out.println("Getting user from: "+ userAddress.getmLocality());
             return locator.getUsersNearMe(userAddress);
+        }
+
+        System.out.println("Getting users from: "+locatorName+" null");
         return null;
 
     }

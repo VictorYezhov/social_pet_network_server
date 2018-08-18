@@ -42,8 +42,11 @@ public class CountryLevelLocator extends AbstractLocator {
     @Override
     public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
         Locator locator = subLocators.get(userAddress.getmAdminArea());
-        if(locator != null)
+        if(locator != null) {
+            System.out.println("Getting users from: "+ userAddress.getmAdminArea());
             return locator.getUsersNearMe(userAddress);
+        }
+        System.out.println("Users in "+locatorName+" null");
         return null;
 
     }
