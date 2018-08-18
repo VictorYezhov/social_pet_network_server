@@ -60,6 +60,11 @@ public class SubLocalityLocator extends AbstractLocator {
     }
 
     @Override
+    public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
+        return region.getAll(ids.keySet());
+    }
+
+    @Override
     public String snapShoot() {
         StringBuilder builder = new StringBuilder();
         builder.append("\nLocality: ");

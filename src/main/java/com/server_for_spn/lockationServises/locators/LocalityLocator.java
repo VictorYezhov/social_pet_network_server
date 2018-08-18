@@ -59,8 +59,8 @@ public class LocalityLocator extends AbstractLocator {
                 System.out.println("LocalityLocator: Lat or Long  is null");
                 return locationResponseFail;
             }
-            coordinates.setLatitude(userAddress.getmLatitude());
             coordinates.setLongitude(userAddress.getmLatitude());
+            coordinates.setLatitude(userAddress.getmLatitude());
             region.put(userAddress.getUserId(), coordinates);
             ids.put(userAddress.getUserId(), userAddress.getUserId());
             return locationResponseOK;
@@ -73,6 +73,23 @@ public class LocalityLocator extends AbstractLocator {
             subLocators.put(userAddress.getmSubLocality(), locator);
             return locator.addUserToLocation(userAddress);
         }
+    }
+
+
+    @Override
+    public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
+        if(userAddress.getmSubLocality() != null && subLocators.containsKey(userAddress.getmSubLocality())){
+            return subLocators.get(userAddress.getmSubLocality()).getUsersNearMe(userAddress);
+        }
+        if (userAddress.getmSubLocality() == null){
+            return region.getAll(ids.keySet());
+        }
+        if(userAddress.getmSubLocality() != null){
+            addUserToLocation(userAddress);
+            subLocators.get(userAddress.getmSubLocality()).getUsersNearMe(userAddress);
+        }
+
+        return null;
     }
 
     @Override

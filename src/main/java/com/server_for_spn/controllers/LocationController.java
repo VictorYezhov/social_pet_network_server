@@ -2,6 +2,7 @@ package com.server_for_spn.controllers;
 
 import com.server_for_spn.entity.User;
 import com.server_for_spn.lockationServises.LocationService;
+import com.server_for_spn.lockationServises.models.Coordinates;
 import com.server_for_spn.lockationServises.models.LocationResponse;
 import com.server_for_spn.lockationServises.models.UserAddress;
 import com.server_for_spn.service.UserService;
@@ -12,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.GeneratedValue;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,6 +41,7 @@ public class LocationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userAddress.setUserId(id);
+        System.out.println(userAddress.toString());
         long start = System.currentTimeMillis();
         LocationResponse locationResponse = locationService.saveLocation(userAddress);
         long end  = System.currentTimeMillis();
@@ -48,6 +52,33 @@ public class LocationController {
         System.out.println("-------------------------------------------------------------------------");
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/getUsersNearMe")
+    public ResponseEntity<Map<Long, Coordinates>> getUsersNearMe(@RequestBody UserAddress userAddress, Authentication authentication) throws InterruptedException {
+
+        final User[] u = new User[1];
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+               u[0] = userService.findOne(userAddress.getUserId());
+            }
+        });
+        thread.start();
+
+        Map<Long, Coordinates> coordinatesMap = locationService.getUsersNearMe(userAddress);
+        thread.join();
+        if(!authentication.getPrincipal().toString().equals(u[0].getEmail())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        if(coordinatesMap != null){
+            return new ResponseEntity<>(coordinatesMap, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
+
+
 
 
     //TODO Delete in production

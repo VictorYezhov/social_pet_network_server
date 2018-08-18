@@ -18,6 +18,7 @@ public interface Locator {
     long getAmountOfUsersInThisLocation();
     Locator addSubLocator(String name, Locator locator);
 
+    Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress);
     String snapShoot();
 
 }

@@ -1,6 +1,7 @@
 package com.server_for_spn.lockationServises.locators;
 
 import com.server_for_spn.lockationServises.models.Coordinates;
+import com.server_for_spn.lockationServises.models.UserAddress;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +32,8 @@ public  abstract class AbstractLocator implements Locator {
         }else {
             return subLocators.get(name);
         }
-
     }
+
 
     @Override
     public Map<Long, Coordinates> getUsersInThisLocation() {

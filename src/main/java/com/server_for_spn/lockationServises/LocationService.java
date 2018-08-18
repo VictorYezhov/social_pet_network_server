@@ -2,6 +2,7 @@ package com.server_for_spn.lockationServises;
 
 import com.server_for_spn.lockationServises.locators.CountryLevelLocator;
 import com.server_for_spn.lockationServises.locators.Locator;
+import com.server_for_spn.lockationServises.models.Coordinates;
 import com.server_for_spn.lockationServises.models.LocationResponse;
 import com.server_for_spn.lockationServises.models.UserAddress;
 import org.springframework.context.annotation.Scope;
@@ -31,6 +32,17 @@ public class LocationService {
         Locator locator = new CountryLevelLocator(userAddress.getmCountryName());
         countries.put(userAddress.getmCountryCode(), locator);
         return locator.addUserToLocation(userAddress);
+    }
+
+
+    public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress){
+        if(countries.containsKey(userAddress.getmCountryCode())){
+            return countries.get(userAddress.getmCountryCode()).getUsersNearMe(userAddress);
+        }
+        Locator locator = new CountryLevelLocator(userAddress.getmCountryName());
+        countries.put(userAddress.getmCountryCode(), locator);
+        locator.addUserToLocation(userAddress);
+        return locator.getUsersNearMe(userAddress);
     }
 
 
