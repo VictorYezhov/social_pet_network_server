@@ -41,33 +41,20 @@ public class LocationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userAddress.setUserId(id);
-        System.out.println(userAddress.toString());
-        long start = System.currentTimeMillis();
         LocationResponse locationResponse = locationService.saveLocation(userAddress);
-        long end  = System.currentTimeMillis();
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.println("DURATION:\n"+ TimeUnit.MILLISECONDS.toSeconds(end - start)+" seconds");
-        System.out.println((end - start) +" mils");
-        System.out.println("RESPONSE: "+locationResponse.getMessage());
-        System.out.println("-------------------------------------------------------------------------");
+        if(!locationResponse.isState()){
+            System.out.println(locationResponse.getMessage());
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/getUsersNearMe")
     public ResponseEntity<Map<Long, Coordinates>> getUsersNearMe(@RequestBody UserAddress userAddress, Authentication authentication) throws InterruptedException {
 
-        final User[] u = new User[1];
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-               u[0] = userService.findOne(userAddress.getUserId());
-            }
-        });
-        thread.start();
-
-        Map<Long, Coordinates> coordinatesMap = locationService.getUsersNearMe(userAddress);
-        thread.join();
-        if(!authentication.getPrincipal().toString().equals(u[0].getEmail())){
+        Map<Long, Coordinates> coordinatesMap =locationService.getUsersNearMe(userAddress);
+        User user = userService.findOne(userAddress.getUserId());
+        if(!authentication.getPrincipal().toString().equals(user.getEmail())){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         if(coordinatesMap != null){

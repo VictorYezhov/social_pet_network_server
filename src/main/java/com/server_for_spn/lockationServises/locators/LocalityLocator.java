@@ -79,16 +79,19 @@ public class LocalityLocator extends AbstractLocator {
     @Override
     public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
         if(userAddress.getmSubLocality() != null && subLocators.containsKey(userAddress.getmSubLocality())){
+            System.out.println("Getting users from: "+userAddress.getmSubLocality());
             return subLocators.get(userAddress.getmSubLocality()).getUsersNearMe(userAddress);
         }
         if (userAddress.getmSubLocality() == null){
+            System.out.println("Returning user from "+ locatorName);
             return region.getAll(ids.keySet());
         }
         if(userAddress.getmSubLocality() != null){
             addUserToLocation(userAddress);
+            System.out.println("Getting users from: "+userAddress.getmSubLocality());
             subLocators.get(userAddress.getmSubLocality()).getUsersNearMe(userAddress);
         }
-
+        System.out.println("Getting users from: "+locatorName+" null");
         return null;
     }
 

@@ -61,6 +61,7 @@ public class SubLocalityLocator extends AbstractLocator {
 
     @Override
     public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
+        System.out.println("Returning users from: "+ locatorName);
         return region.getAll(ids.keySet());
     }
 
