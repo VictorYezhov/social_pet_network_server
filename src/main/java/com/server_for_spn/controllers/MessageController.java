@@ -6,6 +6,7 @@ import com.server_for_spn.entity.Friends;
 import com.server_for_spn.entity.Message;
 import com.server_for_spn.entity.User;
 import com.server_for_spn.fcm_notifications.NotificationService;
+import com.server_for_spn.service.FriendShipService;
 import com.server_for_spn.service.MessageService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class MessageController {
 
     @Autowired
     private FriendsDAO friendsDAO;
+
+    @Autowired
+    private FriendShipService friendShipService;
 
     @Autowired
     @Qualifier("messageNotifier")
@@ -79,6 +83,16 @@ public class MessageController {
         friend.additionalField = friends.getId();
         messageNotifier.sendNotification(user, friend);
 
+        return "Ok";
+    }
+
+    @PostMapping("/makeLastMessageRead")
+    public String makeMessageRead(@RequestParam("friends_id") Long id){
+        Friends friends = friendShipService.findOne(id);
+        List<Message> messages = friends.getMessages();
+        Message message = messages.get(messages.size() - 1);
+        message.setRead(true);
+        messageService.update(message);
         return "Ok";
     }
 }
