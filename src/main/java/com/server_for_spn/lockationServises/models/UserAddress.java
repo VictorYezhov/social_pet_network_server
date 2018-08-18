@@ -1,4 +1,6 @@
-package com.server_for_spn.lockationServises;
+package com.server_for_spn.lockationServises.models;
+
+import com.server_for_spn.lockationServises.locators.Locator;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -7,6 +9,8 @@ import java.util.Locale;
  * Created by Victor on 16.08.2018.
  */
 public class UserAddress {
+
+    private Long userId;
     private Locale mLocale;
     private String mFeatureName;
     private HashMap<Integer, String> mAddressLines;
@@ -136,6 +140,14 @@ public class UserAddress {
         return mCountryName;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public void setmCountryName(String mCountryName) {
         this.mCountryName = mCountryName;
     }
@@ -190,7 +202,7 @@ public class UserAddress {
 
     @Override
     public String toString() {
-        return "UserAddress{" +
+        return "UserAddress{" + "\nUSER ID: "+ userId+
                 "\nmLocale=" + mLocale +
                 "\nmFeatureName='" + mFeatureName + '\'' +
                 "\nmAddressLines=" + mAddressLines +
