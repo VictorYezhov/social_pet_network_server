@@ -1,7 +1,7 @@
 package com.server_for_spn.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sun.xml.internal.bind.v2.model.core.ID;
+
 
 
 import javax.persistence.*;

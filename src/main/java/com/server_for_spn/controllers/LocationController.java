@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.GeneratedValue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Victor on 16.08.2018.
@@ -38,11 +38,22 @@ public class LocationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userAddress.setUserId(id);
+        long start = System.currentTimeMillis();
         LocationResponse locationResponse = locationService.saveLocation(userAddress);
+        long end  = System.currentTimeMillis();
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("DURATION:\n"+ TimeUnit.MILLISECONDS.toSeconds(end - start)+" seconds");
+        System.out.println((end - start) +" mils");
         System.out.println("RESPONSE: "+locationResponse.getMessage());
-        System.out.println(locationService.realTimeSnapShoot());
         System.out.println("-------------------------------------------------------------------------");
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    //TODO Delete in production
+    @GetMapping("/api/getSnapshoot")
+    public String snapshoot(){
+        return locationService.realTimeSnapShoot();
     }
 
 

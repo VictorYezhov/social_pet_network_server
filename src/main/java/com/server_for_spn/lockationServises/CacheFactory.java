@@ -36,7 +36,7 @@ public class CacheFactory {
     public  static Cache<Long, Coordinates> createCacheForUsers(String nameOfLocality){
         return cacheManager.createCache(nameOfLocality+"  users", CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, Coordinates.class,
                 ResourcePoolsBuilder.newResourcePoolsBuilder()
-                        .offheap(200, MemoryUnit.MB))
+                        .offheap(15, MemoryUnit.MB))
                 .withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofSeconds(10))));
     }
 

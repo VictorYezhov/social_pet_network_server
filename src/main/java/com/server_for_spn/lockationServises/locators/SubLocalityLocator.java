@@ -55,6 +55,7 @@ public class SubLocalityLocator extends AbstractLocator {
         coordinates.setLatitude(userAddress.getmLatitude());
         coordinates.setLongitude(userAddress.getmLatitude());
         region.put(userAddress.getUserId(), coordinates);
+        ids.put(userAddress.getUserId(),userAddress.getUserId());
         return locationResponseOK;
     }
 
@@ -64,14 +65,15 @@ public class SubLocalityLocator extends AbstractLocator {
         builder.append("\nLocality: ");
         builder.append(locatorName);
         if(!ids.isEmpty()){
-            builder.append("\nUsers:");
-            getUsersInThisLocation().forEach((k, v) -> {builder.append(k); builder.append("\n");
+            builder.append("\nUsers:{");
+            getUsersInThisLocation().forEach((k, v) -> {builder.append("user id: ");builder.append(k); builder.append("\n");
                 builder.append("lat: ");
                 builder.append(v.getLatitude());
                 builder.append("long: ");
                 builder.append(v.getLongitude());
             builder.append("\n");});
         }
+        builder.append("}\n");
         return builder.toString();
     }
 }

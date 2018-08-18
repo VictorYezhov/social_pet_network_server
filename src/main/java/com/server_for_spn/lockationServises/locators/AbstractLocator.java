@@ -4,13 +4,14 @@ import com.server_for_spn.lockationServises.models.Coordinates;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Victor on 17.08.2018.
  */
 public  abstract class AbstractLocator implements Locator {
 
-    protected Map<String, Locator> subLocators = new HashMap<>();
+    protected Map<String, Locator> subLocators = new ConcurrentHashMap<>();
     protected String locatorName;
 
     public AbstractLocator(String locatorName) {
