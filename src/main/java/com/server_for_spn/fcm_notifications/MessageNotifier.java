@@ -32,6 +32,7 @@ public class MessageNotifier implements NotificationService{
                 .setToken(to.getFcmToken())
                 .setApnsConfig(apnsConfig)
                 .setAndroidConfig(androidConfig)
+                .putData("type", notificationType.name())
                 .putData("message_text", from.additionalField.toString())
                 .putData("user_from", from.getId().toString())
                 .putData("user_to", to.getId().toString())
