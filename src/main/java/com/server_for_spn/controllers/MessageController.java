@@ -99,4 +99,26 @@ public class MessageController {
 
         return "Ok";
     }
+
+    @PostMapping("/getAllUnreadMessages")
+    public List<MessageDTO> sendAllUnreadMessages(@RequestParam("user_1") Long user1,
+                                        @RequestParam("user_2") Long user2){
+
+        List<MessageDTO> messageDTOList = new ArrayList<>();
+        Friends friends = friendsDAO.findBySide1AndSide2(userService.findOne(user1),userService.findOne(user2));
+
+        if(friends == null){
+            friends = friendsDAO.findBySide1AndSide2(userService.findOne(user2),userService.findOne(user1));
+        }
+
+        List<Message> messages = messageService.findAllUnreadMessages(friends.getId());
+
+        for (Message message:
+             messages) {
+            MessageDTO messageDTO = new MessageDTO(message);
+            messageDTOList.add(messageDTO);
+        }
+
+        return messageDTOList;
+    }
 }
