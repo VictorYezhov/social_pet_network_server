@@ -53,7 +53,7 @@ public class SubLocalityLocator extends AbstractLocator {
             return locationResponseFail;
         }
         coordinates.setLatitude(userAddress.getmLatitude());
-        coordinates.setLongitude(userAddress.getmLatitude());
+        coordinates.setLongitude(userAddress.getmLongitude());
         region.put(userAddress.getUserId(), coordinates);
         ids.put(userAddress.getUserId(),userAddress.getUserId());
         return locationResponseOK;

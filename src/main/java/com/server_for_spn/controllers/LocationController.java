@@ -50,10 +50,13 @@ public class LocationController {
     }
 
     @PostMapping("/getUsersNearMe")
-    public ResponseEntity<Map<Long, Coordinates>> getUsersNearMe(@RequestBody UserAddress userAddress, Authentication authentication) throws InterruptedException {
+    public ResponseEntity<Map<Long, Coordinates>> getUsersNearMe(@RequestBody UserAddress userAddress,
+                                                                 @RequestParam("id") Long id,
+                                                                 Authentication authentication) throws InterruptedException {
 
         Map<Long, Coordinates> coordinatesMap =locationService.getUsersNearMe(userAddress);
-        User user = userService.findOne(userAddress.getUserId());
+        User user = userService.findOne(id);
+        userAddress.setUserId(id);
         if(!authentication.getPrincipal().toString().equals(user.getEmail())){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

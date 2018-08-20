@@ -59,7 +59,7 @@ public class LocalityLocator extends AbstractLocator {
                 System.out.println("LocalityLocator: Lat or Long  is null");
                 return locationResponseFail;
             }
-            coordinates.setLongitude(userAddress.getmLatitude());
+            coordinates.setLongitude(userAddress.getmLongitude());
             coordinates.setLatitude(userAddress.getmLatitude());
             region.put(userAddress.getUserId(), coordinates);
             ids.put(userAddress.getUserId(), userAddress.getUserId());
