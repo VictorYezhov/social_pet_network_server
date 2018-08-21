@@ -68,7 +68,7 @@ public class SubLocalityLocator extends AbstractLocator {
     @Override
     public String snapShoot() {
         StringBuilder builder = new StringBuilder();
-        builder.append("\nLocality: ");
+        builder.append("\nSubLocality: ");
         builder.append(locatorName);
         if(!ids.isEmpty()){
             builder.append("\nUsers:{");

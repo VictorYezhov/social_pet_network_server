@@ -11,6 +11,7 @@ import com.server_for_spn.service.MessageService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,6 +86,24 @@ public class MessageController {
 
         return "Ok";
     }
+
+
+    @PostMapping("/getUnReadMessagesAmount")
+    public Integer getUnReadMessagesAmount(@RequestParam("id") Long id, Authentication authentication){
+
+        User u = userService.findOne(id);
+        if(!authentication.getPrincipal().toString().equals(u.getEmail())){
+            System.out.println("Security breakUp");
+            return null;
+        }
+
+        return messageService.countInreadedMessagesForUser(id);
+
+
+
+    }
+
+
 
     @PostMapping("/makeLastMessageRead")
     public String makeMessageRead(@RequestParam("friends_id") Long id){

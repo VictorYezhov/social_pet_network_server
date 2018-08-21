@@ -11,4 +11,7 @@ import java.util.List;
 public interface MessageDAO extends JpaRepository<Message, Long> {
     @Query(value = "select * from message where friends_id =:id and is_read = false ",nativeQuery = true)
     List<Message> findMessagesByFriendsAndRead(@Param("id")Long id);
+
+    @Query(value = "select count(*) from message where friends_id =:id and is_read = false ",nativeQuery = true)
+    Integer countUnreaded(@Param("id")Long id);
 }

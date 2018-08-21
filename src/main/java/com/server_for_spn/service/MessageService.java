@@ -3,6 +3,7 @@ package com.server_for_spn.service;
 import com.server_for_spn.entity.Friends;
 import com.server_for_spn.entity.Message;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface MessageService {
@@ -18,5 +19,7 @@ public interface MessageService {
     void update(Message message);
 
     List<Message> findAllUnreadMessages(Long id);
+
+    Integer countInreadedMessagesForUser(Long id);
 
 }

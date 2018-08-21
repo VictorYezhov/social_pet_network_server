@@ -110,13 +110,13 @@ public class UserController {
 
 
     @PostMapping("/online")
-    public ResponseEntity<String>  online(@RequestParam("id")Long id,
+    public ResponseEntity<String>  online(@RequestParam("id")Long id,@RequestParam("time") Long time,
                                           Authentication authentication){
 
         User u = userService.findOne(id);
         System.out.println("USER: "+u.getEmail()+" ONLINE");
         if(u.getEmail().equals(authentication.getPrincipal().toString())){
-            u.getUserState().setLastActiveTime(new Timestamp(System.currentTimeMillis()));
+            u.getUserState().setLastActiveTime(new Timestamp(time));
             userService.save(u);
             return new ResponseEntity<>("OK", HttpStatus.OK);
         }
