@@ -153,7 +153,7 @@ public class UserController {
                 Message m = f.getMessages().get(f.getMessages().size() - 1);
                 c.setLastMessage(m.getMessageText());
                 c.setTimestamp(m.getTimestamp());
-            }catch (ArrayIndexOutOfBoundsException e){
+            }catch (IndexOutOfBoundsException e){
                 c.setLastMessage("no messages");
             }
 
