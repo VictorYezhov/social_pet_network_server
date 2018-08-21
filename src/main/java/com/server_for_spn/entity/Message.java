@@ -28,7 +28,7 @@ public class Message {
 
     public Message(MessageDTO messageDTO) {
         this.messageText = messageDTO.getMessage();
-        this.userTo = messageDTO.getUser_to();
+        this.userTo = messageDTO.getUserTo();
         this.isRead = messageDTO.isRead();
     }
 

@@ -5,21 +5,21 @@ import com.server_for_spn.entity.User;
 import java.sql.Timestamp;
 
 public class Contact {
-    private Long friend_id;
+    private Long friendId;
     private Timestamp timestamp;
     private String name;
     private String surname;
     private String lastMessage;
 
-    public Contact(Long friend_id, String name, String surname, String lastMessage) {
-        this.friend_id = friend_id;
+    public Contact(Long friendId, String name, String surname, String lastMessage) {
+        this.friendId = friendId;
         this.name = name;
         this.surname = surname;
         this.lastMessage = lastMessage;
     }
 
-    public Contact(Long friend_id, Timestamp timestamp, String name, String surname, String lastMessage) {
-        this.friend_id = friend_id;
+    public Contact(Long friendId, Timestamp timestamp, String name, String surname, String lastMessage) {
+        this.friendId = friendId;
         this.timestamp = timestamp;
         this.name = name;
         this.surname = surname;
@@ -27,17 +27,17 @@ public class Contact {
     }
 
     public Contact(User user){
-        this.friend_id = user.getId();
+        this.friendId = user.getId();
         this.name = user.getName();
         this.surname = user.getFamilyName();
     }
 
-    public Long getFriend_id() {
-        return friend_id;
+    public Long getFriendId() {
+        return friendId;
     }
 
-    public void setFriend_id(Long friend_id) {
-        this.friend_id = friend_id;
+    public void setFriendId(Long friendId) {
+        this.friendId = friendId;
     }
 
     public String getName() {

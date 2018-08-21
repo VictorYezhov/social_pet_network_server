@@ -66,7 +66,7 @@ public class MessageController {
         Message message = new Message(messageDTO);
 
         User user = userService.findOne(id);
-        User friend = userService.findOne(messageDTO.getUser_to());
+        User friend = userService.findOne(messageDTO.getUserTo());
         Friends friends = friendsDAO.findBySide1AndSide2(user,friend);
 
         if(friends == null){

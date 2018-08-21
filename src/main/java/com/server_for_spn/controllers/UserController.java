@@ -134,9 +134,12 @@ public class UserController {
     }
 
     @PostMapping("/getAllContactsOfCurrentUser")
-    public List<Contact> getAllContactsOfCurrentUser(@RequestParam("id") Long id){
+    public List<Contact> getAllContactsOfCurrentUser(@RequestParam("id") Long id, Authentication authentication){
         List<Contact> contacts = new ArrayList<>();
         User user = userService.findOne(id);
+        if(!authentication.getPrincipal().toString().equals(user.getEmail())){
+            return null;
+        }
         List<Friends> friends = user.getFriends();
         for (Friends f: friends) {
             Contact c;

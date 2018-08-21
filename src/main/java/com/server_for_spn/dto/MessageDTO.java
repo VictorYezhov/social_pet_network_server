@@ -8,8 +8,8 @@ public class MessageDTO {
     private Long id;
     private String message;
     private Timestamp timestamp;
-    private Long friends_id;
-    private Long user_to;
+    private Long friendsId;
+    private Long userTo;
     private boolean read;
 
     public MessageDTO() {
@@ -19,8 +19,8 @@ public class MessageDTO {
         this.id = m.getId();
         this.message = m.getMessageText();
         this.timestamp = m.getTimestamp();
-        this.friends_id = m.getFriends().getId();
-        this.user_to = m.getUserTo();
+        this.friendsId = m.getFriends().getId();
+        this.userTo = m.getUserTo();
         this.read = m.isRead();
     }
 
@@ -48,12 +48,12 @@ public class MessageDTO {
         this.timestamp = timestamp;
     }
 
-    public Long getUser_to() {
-        return user_to;
+    public Long getUserTo() {
+        return userTo;
     }
 
-    public void setUser_to(Long user_to) {
-        this.user_to = user_to;
+    public void setUserTo(Long userTo) {
+        this.userTo = userTo;
     }
 
     public boolean isRead() {
@@ -64,11 +64,21 @@ public class MessageDTO {
         this.read = read;
     }
 
-    public Long getFriends_id() {
-        return friends_id;
+    public Long getFriendsId() {
+        return friendsId;
     }
 
-    public void setFriends_id(Long friends_id) {
-        this.friends_id = friends_id;
+    public void setFriendsId(Long friendsId) {
+        this.friendsId = friendsId;
     }
+
+    public Long getUserFrom() {
+        return userFrom;
+    }
+
+    public void setUserFrom(Long userFrom) {
+        this.userFrom = userFrom;
+    }
+
+    private Long userFrom;
 }
