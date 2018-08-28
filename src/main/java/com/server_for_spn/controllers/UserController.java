@@ -116,7 +116,9 @@ public class UserController {
         User u = userService.findOne(id);
         System.out.println("USER: "+u.getEmail()+" ONLINE");
         if(u.getEmail().equals(authentication.getPrincipal().toString())){
-            u.getUserState().setLastActiveTime(new Timestamp(time));
+            Timestamp t = new Timestamp(time);
+            System.out.println(t.toString());
+            u.getUserState().setLastActiveTime(t);
             userService.save(u);
             return new ResponseEntity<>("OK", HttpStatus.OK);
         }
@@ -161,6 +163,13 @@ public class UserController {
         }
 
         return contacts;
+    }
+
+    @PostMapping("/checkIfUserIsOnline")
+    public Long sendUserLastActiveTime(@RequestParam("id") Long id){
+        User user = userService.findOne(id);
+        System.out.println();
+        return user.getUserState().getLastActiveTime().getTime();
     }
 
 }
