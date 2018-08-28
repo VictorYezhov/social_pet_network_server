@@ -1,7 +1,6 @@
 package com.server_for_spn.lockationServises;
 
-import com.server_for_spn.entity.TestEntity;
-import com.server_for_spn.lockationServises.models.Coordinates;
+import com.server_for_spn.lockationServises.models.CoordinatesInfo;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
@@ -33,8 +32,8 @@ public class CacheFactory {
     }
 
 
-    public  static Cache<Long, Coordinates> createCacheForUsers(String nameOfLocality){
-        return cacheManager.createCache(nameOfLocality+"  users", CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, Coordinates.class,
+    public  static Cache<Long, CoordinatesInfo> createCacheForUsers(String nameOfLocality){
+        return cacheManager.createCache(nameOfLocality+"  users", CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, CoordinatesInfo.class,
                 ResourcePoolsBuilder.newResourcePoolsBuilder()
                         .offheap(15, MemoryUnit.MB))
                 .withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofSeconds(10))));

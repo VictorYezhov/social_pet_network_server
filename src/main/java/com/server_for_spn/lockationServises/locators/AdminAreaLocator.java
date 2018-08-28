@@ -1,6 +1,6 @@
 package com.server_for_spn.lockationServises.locators;
 
-import com.server_for_spn.lockationServises.models.Coordinates;
+import com.server_for_spn.lockationServises.models.CoordinatesInfo;
 import com.server_for_spn.lockationServises.models.LocationLevel;
 import com.server_for_spn.lockationServises.models.LocationResponse;
 import com.server_for_spn.lockationServises.models.UserAddress;
@@ -47,18 +47,17 @@ public class AdminAreaLocator extends AbstractLocator  {
     }
 
     @Override
-    public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
+    public Map<Long, CoordinatesInfo> getUsersNearMe(UserAddress userAddress) {
         Locator locator = null;
         if(userAddress.getmSubAdminArea()!= null)
             locator = subLocators.get(userAddress.getmSubAdminArea());
         if(locator != null) {
-            System.out.println("Getting users from: "+userAddress.getmSubAdminArea());
+
             return locator.getUsersNearMe(userAddress);
         }
         if(userAddress.getmLocality()!= null)
         locator = subLocators.get(userAddress.getmLocality());
         if(locator != null) {
-            System.out.println("Getting users from: "+userAddress.getmLocality());
             return locator.getUsersNearMe(userAddress);
         }
         System.out.println("Getting users from: "+locatorName+" null");

@@ -3,7 +3,7 @@ package com.server_for_spn.lockationServises.locators;
 import com.server_for_spn.lockationServises.CacheFactory;
 import com.server_for_spn.lockationServises.models.LocationLevel;
 import com.server_for_spn.lockationServises.models.LocationResponse;
-import com.server_for_spn.lockationServises.models.Coordinates;
+import com.server_for_spn.lockationServises.models.CoordinatesInfo;
 import com.server_for_spn.lockationServises.models.UserAddress;
 import net.jodah.expiringmap.ExpiringMap;
 import org.ehcache.Cache;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Victor on 17.08.2018.
  */
 public class SubLocalityLocator extends AbstractLocator {
-    private Cache<Long, Coordinates> region;
+    private Cache<Long, CoordinatesInfo> region;
     private Map<Long, Long> ids;
 
     private static LocationResponse locationResponseFail = new LocationResponse(false, "SubLocalityLocator: Lat or Long  is null");
@@ -31,7 +31,7 @@ public class SubLocalityLocator extends AbstractLocator {
     }
 
     @Override
-    public Map<Long, Coordinates> getUsersInThisLocation() {
+    public Map<Long, CoordinatesInfo> getUsersInThisLocation() {
         return region.getAll(ids.keySet());
     }
 
@@ -47,21 +47,21 @@ public class SubLocalityLocator extends AbstractLocator {
 
     @Override
     public LocationResponse addUserToLocation(UserAddress userAddress) {
-        Coordinates coordinates = new Coordinates();
+        CoordinatesInfo coordinatesInfo = new CoordinatesInfo();
         if(!userAddress.ismHasLatitude() || !userAddress.ismHasLongitude()){
             System.out.println("LocalityLocator: Lat or Long  is null");
             return locationResponseFail;
         }
-        coordinates.setLatitude(userAddress.getmLatitude());
-        coordinates.setLongitude(userAddress.getmLongitude());
-        region.put(userAddress.getUserId(), coordinates);
+        coordinatesInfo.setLatitude(userAddress.getmLatitude());
+        coordinatesInfo.setLongitude(userAddress.getmLongitude());
+        coordinatesInfo.setAttitude(userAddress.getAttitude());
+        region.put(userAddress.getUserId(), coordinatesInfo);
         ids.put(userAddress.getUserId(),userAddress.getUserId());
         return locationResponseOK;
     }
 
     @Override
-    public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
-        System.out.println("Returning users from: "+ locatorName);
+    public Map<Long, CoordinatesInfo> getUsersNearMe(UserAddress userAddress) {
         return region.getAll(ids.keySet());
     }
 

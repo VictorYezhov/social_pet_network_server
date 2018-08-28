@@ -2,7 +2,7 @@ package com.server_for_spn.lockationServises;
 
 import com.server_for_spn.lockationServises.locators.CountryLevelLocator;
 import com.server_for_spn.lockationServises.locators.Locator;
-import com.server_for_spn.lockationServises.models.Coordinates;
+import com.server_for_spn.lockationServises.models.CoordinatesInfo;
 import com.server_for_spn.lockationServises.models.LocationResponse;
 import com.server_for_spn.lockationServises.models.UserAddress;
 import org.springframework.context.annotation.Scope;
@@ -35,7 +35,7 @@ public class LocationService {
     }
 
 
-    public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress){
+    public Map<Long, CoordinatesInfo> getUsersNearMe(UserAddress userAddress){
         if(countries.containsKey(userAddress.getmCountryCode())){
             System.out.println("Getting users From: "+userAddress.getmCountryCode());
             return countries.get(userAddress.getmCountryCode()).getUsersNearMe(userAddress);

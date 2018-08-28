@@ -1,7 +1,6 @@
 package com.server_for_spn.lockationServises.locators;
 
-import com.server_for_spn.lockationServises.models.Coordinates;
-import com.server_for_spn.lockationServises.models.UserAddress;
+import com.server_for_spn.lockationServises.models.CoordinatesInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +35,8 @@ public  abstract class AbstractLocator implements Locator {
 
 
     @Override
-    public Map<Long, Coordinates> getUsersInThisLocation() {
-        Map<Long, Coordinates> coordinatesMap = new HashMap<>();
+    public Map<Long, CoordinatesInfo> getUsersInThisLocation() {
+        Map<Long, CoordinatesInfo> coordinatesMap = new HashMap<>();
         subLocators.forEach((k, v) -> coordinatesMap.putAll(v.getUsersInThisLocation()));
         return coordinatesMap;
     }

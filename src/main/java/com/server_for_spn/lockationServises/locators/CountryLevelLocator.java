@@ -1,6 +1,6 @@
 package com.server_for_spn.lockationServises.locators;
 
-import com.server_for_spn.lockationServises.models.Coordinates;
+import com.server_for_spn.lockationServises.models.CoordinatesInfo;
 import com.server_for_spn.lockationServises.models.LocationLevel;
 import com.server_for_spn.lockationServises.models.LocationResponse;
 import com.server_for_spn.lockationServises.models.UserAddress;
@@ -40,10 +40,9 @@ public class CountryLevelLocator extends AbstractLocator {
     }
 
     @Override
-    public Map<Long, Coordinates> getUsersNearMe(UserAddress userAddress) {
+    public Map<Long, CoordinatesInfo> getUsersNearMe(UserAddress userAddress) {
         Locator locator = subLocators.get(userAddress.getmAdminArea());
         if(locator != null) {
-            System.out.println("Getting users from: "+ userAddress.getmAdminArea());
             return locator.getUsersNearMe(userAddress);
         }
         System.out.println("Users in "+locatorName+" null");

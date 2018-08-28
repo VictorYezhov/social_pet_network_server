@@ -57,31 +57,44 @@ public class TestController {
 
 
 
-        CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder().withCache("preConfigured",
-                CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, TestEntity.class,
-                        ResourcePoolsBuilder.newResourcePoolsBuilder()
-                                .offheap(2000, MemoryUnit.MB))
-                        .withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofSeconds(10)))
-        )
-                .build(true);
-        Cache<Long, TestEntity> region =
-                cacheManager.getCache("preConfigured", Long.class, TestEntity.class);
 
-        TestEntity testEntity = new TestEntity();
-        testEntity.setId(1L);
-        testEntity.setText("text");
+        List<String> strings = new ArrayList<>();
+        strings.add("Putin");
+        strings.add("Merkell");
+        strings.add("Poroshenko");
 
-        region.put(1L, testEntity);
 
-        TestEntity first = region.get(1L);
+        String pres = strings.get(1);
+        strings.remove(1);
+        return pres;
 
-        TestEntity second = region.get(1L);
 
-        builder.append("first:\n");
-        builder.append(first.getText());
-        builder.append("\nsecond:\n");
-        builder.append(second.getText());
-        return builder.toString();
+
+//        CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder().withCache("preConfigured",
+//                CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, TestEntity.class,
+//                        ResourcePoolsBuilder.newResourcePoolsBuilder()
+//                                .offheap(2000, MemoryUnit.MB))
+//                        .withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofSeconds(10)))
+//        )
+//                .build(true);
+//        Cache<Long, TestEntity> region =
+//                cacheManager.getCache("preConfigured", Long.class, TestEntity.class);
+//
+//        TestEntity testEntity = new TestEntity();
+//        testEntity.setId(1L);
+//        testEntity.setText("text");
+//
+//        region.put(1L, testEntity);
+//
+//        TestEntity first = region.get(1L);
+//
+//        TestEntity second = region.get(1L);
+//
+//        builder.append("first:\n");
+//        builder.append(first.getText());
+//        builder.append("\nsecond:\n");
+//        builder.append(second.getText());
+//        return builder.toString();
 
 
 //        Set<Long> ids = new HashSet<>();

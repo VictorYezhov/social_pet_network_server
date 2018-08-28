@@ -31,6 +31,15 @@ public class UserAddress {
     private boolean mHasLongitude = false;
     private String mPhone;
     private String mUrl;
+    private byte attitude;
+
+    public byte getAttitude() {
+        return attitude;
+    }
+
+    public void setAttitude(byte attitude) {
+        this.attitude = attitude;
+    }
 
     public Locale getmLocale() {
         return mLocale;
