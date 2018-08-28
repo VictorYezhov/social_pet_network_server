@@ -110,13 +110,14 @@ public class UserController {
 
 
     @PostMapping("/online")
-    public ResponseEntity<String>  online(@RequestParam("id")Long id,@RequestParam("time") Long time,
+    public ResponseEntity<String>  online(@RequestParam("id")Long id,@RequestParam("time") String time,
                                           Authentication authentication){
 
         User u = userService.findOne(id);
         System.out.println("USER: "+u.getEmail()+" ONLINE");
+        System.out.println("Time: " + time);
         if(u.getEmail().equals(authentication.getPrincipal().toString())){
-            Timestamp t = new Timestamp(time);
+            Timestamp t = Timestamp.valueOf(time);
             System.out.println(t.toString());
             u.getUserState().setLastActiveTime(t);
             userService.save(u);
@@ -166,10 +167,11 @@ public class UserController {
     }
 
     @PostMapping("/checkIfUserIsOnline")
-    public Long sendUserLastActiveTime(@RequestParam("id") Long id){
+    public String sendUserLastActiveTime(@RequestParam("id") Long id){
         User user = userService.findOne(id);
-        System.out.println();
-        return user.getUserState().getLastActiveTime().getTime();
+        String time = user.getUserState().getLastActiveTime().toString();
+        String time1 = time.replaceAll("\\s", "%");
+        return time1.replaceAll(":","\\^");
     }
 
 }
