@@ -106,9 +106,9 @@ public class MessageController {
 
 
     @PostMapping("/makeLastMessageRead")
-    public String makeMessageRead(@RequestParam("friends_id") Long id){
+    public String makeMessageRead(@RequestParam("friends_id") Long id, @RequestParam("user_id") Long userId){
         Friends friends = friendShipService.findOne(id);
-        List<Message> messages = messageService.findAllUnreadMessages(friends.getId());
+        List<Message> messages = messageService.findAllUnreadMessages(friends.getId(), userId);
 
         for (Message message:
                 messages) {
@@ -130,7 +130,7 @@ public class MessageController {
             friends = friendsDAO.findBySide1AndSide2(userService.findOne(user2),userService.findOne(user1));
         }
 
-        List<Message> messages = messageService.findAllUnreadMessages(friends.getId());
+        List<Message> messages = messageService.findAllUnreadMessages(friends.getId(), user2);
 
         for (Message message:
              messages) {

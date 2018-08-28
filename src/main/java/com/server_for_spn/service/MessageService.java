@@ -18,7 +18,7 @@ public interface MessageService {
 
     void update(Message message);
 
-    List<Message> findAllUnreadMessages(Long id);
+    List<Message> findAllUnreadMessages(Long id, Long uId);
 
     Integer countInreadedMessagesForUser(Long id);
 

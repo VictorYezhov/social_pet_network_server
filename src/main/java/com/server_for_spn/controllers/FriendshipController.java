@@ -131,15 +131,18 @@ public class FriendshipController {
      */
 
     @PostMapping("/acceptFriendshipInvitation")
-    public ResponseEntity<String> acceptFriendshipInvitation(@RequestParam("acceptor") Long acceptorId,
+    public ResponseEntity<FriendInfo> acceptFriendshipInvitation(@RequestParam("acceptor") Long acceptorId,
                                                               @RequestParam("requester")Long requesterId,
                                                               @RequestParam("state") boolean state,
                                                               Authentication authentication){
+
+        FriendInfo newFriend = new FriendInfo();
+
         if(state){
             FriendShipRequest friendShipRequest = friendShipRequestService.findByAcceptorAndRequester(acceptorId, requesterId);
             User acceptor = userService.findOne(friendShipRequest.getAcceptorId());
             if(!authentication.getPrincipal().toString().equals(acceptor.getEmail())){
-                return new ResponseEntity<>( "CONFLICT", HttpStatus.CONFLICT);
+                return new ResponseEntity<>( newFriend, HttpStatus.CONFLICT);
             }
             User requester = userService.findOne(friendShipRequest.getRequesterId());
             Friends friends = new Friends();
@@ -148,8 +151,18 @@ public class FriendshipController {
             friendShipService.save(friends);
             acceptedFriendshipNotifier.sendNotification(acceptor, requester);
             friendShipRequestService.delete(friendShipRequest.getId());
+
+            newFriend.setName(requester.getName());
+            newFriend.setSurname(requester.getFamilyName());
+            newFriend.setId(requester.getId());
+            newFriend.setLastActiveTime(requester.getUserState().getLastActiveTime());
+            Pet pet = getCurrentPetChoise(requester);
+            if(pet != null) {
+                newFriend.setPetName(pet.getName());
+                newFriend.setPetBreedName(pet.getBreed().getName());
+            }
     }
-        return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>( newFriend, HttpStatus.ACCEPTED);
     }
 
 

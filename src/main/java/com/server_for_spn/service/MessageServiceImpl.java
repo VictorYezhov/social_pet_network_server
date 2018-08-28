@@ -44,7 +44,7 @@ public class MessageServiceImpl implements MessageService{
     }
 
     @Override
-    public List<Message> findAllUnreadMessages(Long id) {
-        return messageDAO.findMessagesByFriendsAndRead(id);
+    public List<Message> findAllUnreadMessages(Long id, Long uId) {
+        return messageDAO.findMessagesByFriendsAndRead(id, uId);
     }
 }
