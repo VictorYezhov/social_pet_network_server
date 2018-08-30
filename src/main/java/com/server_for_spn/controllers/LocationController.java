@@ -1,5 +1,6 @@
 package com.server_for_spn.controllers;
 
+import com.server_for_spn.entity.Pet;
 import com.server_for_spn.entity.User;
 import com.server_for_spn.lockationServises.LocationService;
 import com.server_for_spn.lockationServises.models.CoordinatesInfo;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -76,6 +78,38 @@ public class LocationController {
         return locationService.realTimeSnapShoot();
     }
 
+
+
+
+    @PostMapping("/loadMapInfo")
+    public Map<String, String> getMapInfoAboutUser(@RequestParam("id") Long id){
+        User u = userService.findOne(id);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("owner", u.getName()+" "+u.getFamilyName());
+
+        String petName = null;
+        String petBreed = null;
+        String petSex = null;
+        String petAge = null;
+
+        for(Pet p: u.getPetList()){
+            if(p.getId().equals(u.getUserState().getCurrentPetChoose())){
+                petName = p.getName();
+                petAge = String.valueOf(p.getAge());
+                petBreed = p.getBreed().getName();
+                petSex = p.getSex().name();
+            }
+        }
+        params.put("petName", petName);
+        params.put("petBreed", petBreed);
+        params.put("petSex", petSex);
+        params.put("petAge", petAge);
+
+
+
+        return params;
+    }
 
 
 }
