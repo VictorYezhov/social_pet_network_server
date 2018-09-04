@@ -10,6 +10,7 @@ public class Contact {
     private String name;
     private String surname;
     private String lastMessage;
+    private Timestamp onlineTime;
 
     public Contact(Long friendId, String name, String surname, String lastMessage) {
         this.friendId = friendId;
@@ -30,6 +31,14 @@ public class Contact {
         this.friendId = user.getId();
         this.name = user.getName();
         this.surname = user.getFamilyName();
+    }
+
+    public Timestamp getOnlineTime() {
+        return onlineTime;
+    }
+
+    public void setOnlineTime(Timestamp onlineTime) {
+        this.onlineTime = onlineTime;
     }
 
     public Long getFriendId() {

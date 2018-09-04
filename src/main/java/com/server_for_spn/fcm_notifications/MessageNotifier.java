@@ -28,7 +28,7 @@ public class MessageNotifier implements NotificationService{
     @Override
     public void sendNotification(User from, User to) {
 
-        System.out.println("message text ----> " + from.additionalField.toString());
+        //System.out.println("message text ----> " + from.additionalField.toString());
         Message message = Message.builder()
                 .setToken(to.getFcmToken())
                 .setApnsConfig(apnsConfig)

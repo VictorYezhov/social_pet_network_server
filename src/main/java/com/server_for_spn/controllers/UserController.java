@@ -114,8 +114,6 @@ public class UserController {
                                           Authentication authentication){
 
         User u = userService.findOne(id);
-        System.out.println("USER: "+u.getEmail()+" ONLINE");
-        System.out.println("Time: " + time);
         if(u.getEmail().equals(authentication.getPrincipal().toString())){
             Timestamp t = Timestamp.valueOf(time);
             System.out.println(t.toString());
@@ -148,9 +146,13 @@ public class UserController {
             Contact c;
             if(!f.getSide1().getId().equals(id)){
                 c = new Contact(f.getSide1());
+                c.setOnlineTime(f.getSide1().getUserState().getLastActiveTime());
             }else{
                 c = new Contact(f.getSide2());
+                c.setOnlineTime(f.getSide2().getUserState().getLastActiveTime());
             }
+
+
 
             try {
                 Message m = f.getMessages().get(f.getMessages().size() - 1);
