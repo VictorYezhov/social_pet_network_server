@@ -18,6 +18,9 @@ public class City {
     private Country country;
 
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
+    private List<LostPet> lostPets;
+
+    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
     private List<User> users;
 
     public Long getId() {
@@ -26,6 +29,14 @@ public class City {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<LostPet> getLostPets() {
+        return lostPets;
+    }
+
+    public void setLostPets(List<LostPet> lostPets) {
+        this.lostPets = lostPets;
     }
 
     public String getName() {

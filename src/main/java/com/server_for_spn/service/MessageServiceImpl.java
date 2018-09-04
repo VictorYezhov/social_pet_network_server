@@ -40,7 +40,7 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     public Integer countInreadedMessagesForUser(Long id) {
-        return messageDAO.countUnreaded(id);
+        return messageDAO.countUnreaded(id, id);
     }
 
     @Override

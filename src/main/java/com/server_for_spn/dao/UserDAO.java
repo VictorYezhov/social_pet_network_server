@@ -1,9 +1,12 @@
 package com.server_for_spn.dao;
 
+import com.server_for_spn.entity.City;
 import com.server_for_spn.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface UserDAO extends JpaRepository<User, Long> {
 
@@ -12,6 +15,7 @@ public interface UserDAO extends JpaRepository<User, Long> {
 
 
     User findFirstByEmail(String email);
+    List<User> findAllByCity(City city);
 
 
 

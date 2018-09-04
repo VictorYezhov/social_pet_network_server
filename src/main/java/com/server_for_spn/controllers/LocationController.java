@@ -1,11 +1,17 @@
 package com.server_for_spn.controllers;
 
-import com.server_for_spn.entity.Pet;
-import com.server_for_spn.entity.User;
+import antlr.DumpASTVisitor;
+import com.server_for_spn.dao.LostPetDAO;
+import com.server_for_spn.dto.LostPetDTO;
+import com.server_for_spn.entity.*;
+import com.server_for_spn.fcm_notifications.SosNotifier;
 import com.server_for_spn.lockationServises.LocationService;
 import com.server_for_spn.lockationServises.models.CoordinatesInfo;
 import com.server_for_spn.lockationServises.models.LocationResponse;
 import com.server_for_spn.lockationServises.models.UserAddress;
+import com.server_for_spn.service.CityService;
+import com.server_for_spn.service.CountryService;
+import com.server_for_spn.service.PetService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,11 +32,26 @@ public class LocationController {
 
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private LostPetDAO lostPetDAO;
+
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private CountryService countryService;
+
+
+    @Autowired
+    private SosNotifier sosNotifier;
+
+    @Autowired
+    private PetService  petService;
 
 
     @PostMapping("/updateUserPosition")
@@ -40,6 +63,8 @@ public class LocationController {
         if(!user.getEmail().equals(authentication.getPrincipal().toString())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        System.out.println(userAddress.toString());
         userAddress.setUserId(id);
         userAddress.setAttitude(attitude);
         LocationResponse locationResponse = locationService.saveLocation(userAddress);
@@ -110,6 +135,100 @@ public class LocationController {
 
         return params;
     }
+
+
+
+
+    @PostMapping("/sos")
+    public ResponseEntity<?> sos(@RequestParam("id") Long userId,
+                                 @RequestParam("petId") Long petId,
+                                 @RequestBody UserAddress userAddress,
+                                 Authentication authentication){
+        User u = userService.findOne(userId);
+        if(!u.getEmail().equals(authentication.getPrincipal().toString())){
+            return new ResponseEntity<>("Authentication Fail", HttpStatus.BAD_REQUEST);
+        }
+
+        Pet pet = null;
+
+        for (Pet p:
+             u.getPetList()) {
+            if(p.getId().equals(petId))
+                pet  = p;
+        }
+        if(pet == null){
+            return new ResponseEntity<>("Pet not find", HttpStatus.BAD_REQUEST);
+        }
+
+        Country  country =  countryService.findByName(userAddress.getmCountryName());
+        if(country == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(userAddress.getmLocality() == null){
+            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        City city = cityService.findByNameAndCountry(userAddress.getmLocality(), country);
+        if(city == null){
+            city = new City();
+            city.setCountry(country);
+            city.setName(userAddress.getmLocality());
+            cityService.save(city);
+        }
+        LostPet  lostPet = lostPetDAO.findFirstByCityAndLostPetId(city, pet.getId());
+        if(lostPet != null){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        lostPet = new LostPet();
+        lostPet.setCity(city);
+        lostPet.setLostPetId(pet.getId());
+        if(userAddress.getmSubLocality() != null){
+            lostPet.setSubLocality(userAddress.getmSubLocality());
+        }
+        lostPetDAO.save(lostPet);
+//        city.getLostPets().add(lostPet);
+        cityService.update(city);
+        sosNotifier.sendNotification(pet, city);
+
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+
+    @PostMapping("/getLostDogs")
+    public ResponseEntity<List<LostPetDTO>> getLostPets(@RequestBody UserAddress userAddress){
+
+
+        Country  country =  countryService.findByName(userAddress.getmCountryName());
+        if(country == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(userAddress.getmLocality() == null){
+            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        City city = cityService.findByNameAndCountry(userAddress.getmLocality(), country);
+        if(city == null){
+            city = new City();
+            city.setCountry(country);
+            city.setName(userAddress.getmLocality());
+            cityService.save(city);
+        }
+        List<LostPetDTO> lostPetDTOS = new ArrayList<>();
+        List<LostPet> lostPets = lostPetDAO.findAllByCity(city);
+
+        for (LostPet lostPet:
+             lostPets) {
+            User owner = petService.findOne(lostPet.getLostPetId()).getUser();
+            lostPetDTOS.add(new LostPetDTO(lostPet, owner));
+        }
+
+        return new ResponseEntity<>(lostPetDTOS, HttpStatus.OK);
+
+    }
+
+
 
 
 }
