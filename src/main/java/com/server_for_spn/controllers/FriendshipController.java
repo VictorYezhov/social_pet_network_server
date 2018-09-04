@@ -7,6 +7,7 @@ import com.server_for_spn.entity.*;
 import com.server_for_spn.service.FriendShipRequestService;
 import com.server_for_spn.service.FriendShipService;
 import com.server_for_spn.fcm_notifications.NotificationService;
+import com.server_for_spn.service.PetService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,6 +38,9 @@ public class FriendshipController {
 
     @Autowired
     private FriendShipRequestService friendShipRequestService;
+
+    @Autowired
+    private PetService petService;
 
     @Autowired
     @Qualifier("friendshipRequestNotifier")
@@ -269,6 +273,66 @@ public class FriendshipController {
         }
 
         return new ResponseEntity<>("Ok", HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/getInfoAboutNewFriend")
+    private FriendInfo sendNewFriendToTheClient(@RequestParam("new_friend_id") Long id){
+        User user = userService.findOne(id);
+        FriendInfo newFriend = new FriendInfo();
+
+        newFriend.setId(user.getId());
+        newFriend.setName(user.getName());
+        newFriend.setSurname(user.getFamilyName());
+
+        Pet pet =  petService.findOne(user.getUserState().getCurrentPetChoose());
+
+        newFriend.setPetName(pet.getName());
+        newFriend.setPetBreedName(pet.getBreed().getName());
+
+        newFriend.setLastActiveTime(user.getUserState().getLastActiveTime());
+
+        return newFriend;
+    }
+
+    @PostMapping("/getFriendWhoAreNotInPhoneCache")
+    private List<FriendInfo> sendToClientAllFriendWhoAreNotThere(@RequestParam("list_friend_ids") List<Long> listOfIds,
+                                                                 @RequestParam("user_id") Long id){
+
+
+        List<FriendInfo> friendWhoAreNotInPhoneCache = new ArrayList<>();
+
+        for (Friends f:
+             userService.findOne(id).getFriends()) {
+
+            User friend;
+
+            if(!id.equals(f.getSide1().getId())){
+                friend = f.getSide1();
+            }else {
+                friend = f.getSide2();
+            }
+
+            if(!listOfIds.contains(friend.getId())){
+                FriendInfo newFriend = new FriendInfo();
+
+                newFriend.setId(friend.getId());
+                newFriend.setName(friend.getName());
+                newFriend.setSurname(friend.getFamilyName());
+
+                Pet pet =  petService.findOne(friend.getUserState().getCurrentPetChoose());
+
+                newFriend.setPetName(pet.getName());
+                newFriend.setPetBreedName(pet.getBreed().getName());
+
+                newFriend.setLastActiveTime(friend.getUserState().getLastActiveTime());
+
+                friendWhoAreNotInPhoneCache.add(newFriend);
+
+            }
+
+        }
+
+        return friendWhoAreNotInPhoneCache;
     }
 
 
