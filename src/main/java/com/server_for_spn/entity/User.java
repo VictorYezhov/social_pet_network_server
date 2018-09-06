@@ -33,6 +33,10 @@ public class User {
     private UserState UserState;
 
 
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<Photo> photos;
+
     @Transient
     public   transient Object additionalField;
 
@@ -44,6 +48,7 @@ public class User {
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
     }
+
 
     @ManyToOne
     @JoinColumn(name = "city_id")
@@ -104,6 +109,14 @@ public class User {
         return password;
     }
 
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -135,6 +148,7 @@ public class User {
     public List<Pet> getPetList() {
         return petList;
     }
+
 
     public void setPetList(List<Pet> petList) {
         this.petList = petList;

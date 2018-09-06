@@ -64,7 +64,6 @@ public class LocationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println(userAddress.toString());
         userAddress.setUserId(id);
         userAddress.setAttitude(attitude);
         LocationResponse locationResponse = locationService.saveLocation(userAddress);
