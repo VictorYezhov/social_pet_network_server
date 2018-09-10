@@ -7,6 +7,7 @@ import com.server_for_spn.service.ImageSavingService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
@@ -52,14 +53,14 @@ public class PhotoController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-       if(imageSavingService.savePhoto(img, user)) {
+       if(imageSavingService.savePhoto(img, user, true)) {
            return new ResponseEntity<>(HttpStatus.OK);
        }else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
        }
 
     }
-    @PostMapping("/getUsersPhoto")
+    @PostMapping(value = "/getUsersPhoto",  produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getUsersPhoto(@RequestParam("id") Long requesterId,
                                                                  @RequestParam("photoId") Long photoId,
                                                                  Authentication authentication){
@@ -77,6 +78,23 @@ public class PhotoController {
             return  new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+    @PostMapping(value = "/getUsersMainPhoto",  produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getUsersMainPhoto(@RequestParam("id") Long requesterId,
+                                                Authentication authentication){
+        User user = userService.findOne(requesterId);
+        if(!authentication.getPrincipal().toString().equals(user.getEmail())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Photo photo = photoDao.findFirstByOwnerAndMain(user, true);
+        Path path = Paths.get(photo.getPath());
+        try {
+            return new ResponseEntity<>(Files.readAllBytes(path), HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return  new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
 
     @PostMapping("/getUsersPhotoIds")
     public ResponseEntity<List<Long>> getPhotoIdis(@RequestParam("requesterId") Long id,

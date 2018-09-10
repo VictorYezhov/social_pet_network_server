@@ -30,7 +30,7 @@ public class ImageSavingService {
     private PhotoDao photoDao;
 
 
-    public boolean savePhoto(MultipartFile img, User user){
+    public boolean savePhoto(MultipartFile img, User user, boolean main){
         String path =System.getProperty("user.dir") + "/data/Users/"
                 + user.getName()+user.getId()+"/";
         File filePath = new File(path);
@@ -44,6 +44,7 @@ public class ImageSavingService {
             Path pathTo = Paths.get(path+System.currentTimeMillis()+img.getOriginalFilename());
             Photo photo = new Photo();
             photo.setOwner(user);
+            photo.setMain(main);
             photo.setPath(pathTo.toString());
             photoDao.save(photo);
             Files.write(pathTo, bytes);
