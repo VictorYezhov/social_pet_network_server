@@ -11,10 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -48,6 +45,9 @@ public class PhotoController {
     public ResponseEntity<?> updateMainPhoto(@RequestPart(name = "img") MultipartFile img,
                                              @RequestParam("id")Long id,
                                              Authentication authentication){
+
+        System.out.println("i am here");
+
         User user = userService.findOne(id);
         if(!authentication.getPrincipal().toString().equals(user.getEmail())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
