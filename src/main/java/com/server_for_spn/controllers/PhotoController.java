@@ -46,8 +46,6 @@ public class PhotoController {
                                              @RequestParam("id")Long id,
                                              Authentication authentication){
 
-        System.out.println("i am here");
-
         User user = userService.findOne(id);
         if(!authentication.getPrincipal().toString().equals(user.getEmail())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -60,6 +58,26 @@ public class PhotoController {
        }
 
     }
+
+    @PostMapping("/addNewPhoto")
+    public ResponseEntity<?> addNewPhoto(@RequestPart(name = "img") MultipartFile img,
+                                             @RequestParam("id")Long id,
+                                             Authentication authentication){
+
+        User user = userService.findOne(id);
+        if(!authentication.getPrincipal().toString().equals(user.getEmail())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(imageSavingService.savePhoto(img, user, false)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+    }
+
+
     @PostMapping(value = "/getUsersPhoto",  produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getUsersPhoto(@RequestParam("id") Long requesterId,
                                                                  @RequestParam("photoId") Long photoId,
