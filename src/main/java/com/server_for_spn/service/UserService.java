@@ -1,6 +1,7 @@
 package com.server_for_spn.service;
 
 import com.server_for_spn.dto.RegistrationForm;
+import com.server_for_spn.entity.City;
 import com.server_for_spn.entity.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -10,6 +11,7 @@ public interface UserService {
     void save(User user);
 
     List<User> findAll();
+    List<User> findAllByCity(City city);
 
     User findOne(Long id);
 
