@@ -2,6 +2,9 @@ package com.server_for_spn.controllers;
 
 import com.server_for_spn.dto.*;
 import com.server_for_spn.entity.*;
+import com.server_for_spn.search.SearchFilter;
+import com.server_for_spn.service.CityService;
+import com.server_for_spn.service.CountryService;
 import com.server_for_spn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,9 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Victor on 01.07.2018.
@@ -23,7 +24,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CountryService countryService;
 
+    @Autowired
+    private SearchFilter searchFilter;
+
+
+    @Autowired
+    private CityService  cityService;
     /**
      * Registration of new Users
      * @param registrationForm
@@ -176,12 +185,52 @@ public class UserController {
         return time1.replaceAll(":","\\^");
     }
 
-    @PostMapping("/seach")
-    public ResponseEntity<?> search(SearchForm searchForm){
-        return new ResponseEntity<Object>(HttpStatus.OK);
+    @PostMapping("/search")
+    public ResponseEntity<?> search(@RequestBody SearchForm searchForm){
+        System.out.println(searchForm);
+        Country country = countryService.findByName(searchForm.getUserCountry());
+        if(country == null){
+            return new ResponseEntity<>("Wrong Country name",HttpStatus.BAD_REQUEST);
+        }
+        City city = cityService.findByNameAndCountry(searchForm.getUserCity(), country);
+        if(city == null){
+            return  new ResponseEntity<>("Wrong city name",HttpStatus.BAD_REQUEST);
+        }
+        List<User> users = userService.findAllByCity(city);
+        if(users.isEmpty()){
+            return new ResponseEntity<>("No  users in This city",HttpStatus.ACCEPTED);
+        }
+        List<User> filtred = searchFilter.filter(searchForm, users);
+
+        Set<FriendInfo> friendsInfo = new HashSet<>();
+        FriendInfo info;
+        for (User u : filtred) {
+            info = new FriendInfo();
+            info.setName(u.getName());
+            info.setSurname(u.getFamilyName());
+            info.setId(u.getId());
+            info.setLastActiveTime(u.getUserState().getLastActiveTime());
+            Pet pet = getCurrentPetChoise(u);
+            if(pet != null) {
+                info.setPetName(pet.getName());
+                info.setPetBreedName(pet.getBreed().getName());
+            }
+            friendsInfo.add(info);
+        }
+        return new ResponseEntity<>(friendsInfo, HttpStatus.OK);
     }
 
 
+    private Pet getCurrentPetChoise(User user){
+
+        for (Pet p:
+                user.getPetList()) {
+            if (p.getId().equals(user.getUserState().getCurrentPetChoose())) {
+                return p;
+            }
+        }
+        return null;
+    }
 
 
 }

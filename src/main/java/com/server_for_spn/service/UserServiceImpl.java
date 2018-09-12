@@ -158,6 +158,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
+    @Override
+    public List<User> findAllByCity(City city) {
+        return userDAO.findAllByCity(city);
+    }
 }
