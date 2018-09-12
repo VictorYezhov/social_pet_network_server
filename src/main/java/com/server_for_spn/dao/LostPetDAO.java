@@ -13,4 +13,5 @@ public interface LostPetDAO extends JpaRepository<LostPet, Long> {
 
     LostPet findFirstByCityAndLostPetId(City city, Long lostPetId);
     List<LostPet> findAllByCity(City city);
+    LostPet findByLostPetId(Long id);
 }

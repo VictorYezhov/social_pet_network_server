@@ -227,6 +227,13 @@ public class LocationController {
 
     }
 
+    @PostMapping("/userFoundHisPet")
+    public String userFoundHisPet(@RequestParam("pet_id") Long petID){
+        LostPet lostPet = lostPetDAO.findByLostPetId(petID);
+        lostPetDAO.delete(lostPet);
+        return "OK";
+    }
+
 
 
 
