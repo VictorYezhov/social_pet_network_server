@@ -176,4 +176,12 @@ public class UserController {
         return time1.replaceAll(":","\\^");
     }
 
+    @PostMapping("/seach")
+    public ResponseEntity<?> search(SearchForm searchForm){
+        return new ResponseEntity<Object>(HttpStatus.OK);
+    }
+
+
+
+
 }

@@ -82,9 +82,6 @@ public class PhotoController {
     public ResponseEntity<byte[]> getUsersMainPhoto(@RequestParam("id") Long requesterId,
                                                 Authentication authentication){
         User user = userService.findOne(requesterId);
-        if(!authentication.getPrincipal().toString().equals(user.getEmail())){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         Photo photo = photoDao.findFirstByOwnerAndMain(user, true);
         Path path = Paths.get(photo.getPath());
         try {
