@@ -55,6 +55,8 @@ public class FriendShipService {
         return f != null;
     }
 
+    public Friends findBySide1AndSide2(User side1, User side2) { return friendsDAO.findBySide1AndSide2(side1, side2);}
+
 
 
 }

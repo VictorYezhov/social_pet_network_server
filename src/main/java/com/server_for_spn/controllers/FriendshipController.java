@@ -14,12 +14,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -47,9 +45,12 @@ public class FriendshipController {
     private NotificationService friendshipRequestNotifier;
 
     @Autowired
+    @Qualifier("deleteFriendNotifier")
+    private NotificationService deleteFriendNotifier;
+
+    @Autowired
     @Qualifier("friendshipAcceptedNotifier")
     private NotificationService acceptedFriendshipNotifier;
-
 
     /**
      * Add to friends Request functionality
@@ -337,6 +338,19 @@ public class FriendshipController {
 
     @PostMapping("/deleteUserFromFriendList")
     private String deleteUserFromFriendList(@RequestParam("userId") Long userID, @RequestParam("friendId") Long friendID){
+
+        User user = userService.findOne(userID);
+        User friend = userService.findOne(friendID);
+        Friends friendship = friendShipService.findBySide1AndSide2(user, friend);
+        if(friendship == null){
+            friendship = friendShipService.findBySide1AndSide2(friend, user);
+        }
+
+        friendShipService.delete(friendship.getId());
+
+
+        deleteFriendNotifier.sendNotification(user, friend);
+
         return "OK";
     }
 
