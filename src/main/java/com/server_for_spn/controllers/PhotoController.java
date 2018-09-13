@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -104,7 +105,9 @@ public class PhotoController {
         Path path = Paths.get(photo.getPath());
         try {
             return new ResponseEntity<>(Files.readAllBytes(path), HttpStatus.OK);
-        } catch (IOException e) {
+        } catch (NoSuchFileException e){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (IOException e) {
             e.printStackTrace();
             return  new ResponseEntity<>(HttpStatus.CONFLICT);
         }

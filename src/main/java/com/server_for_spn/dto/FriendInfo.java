@@ -79,7 +79,7 @@ public class FriendInfo {
         if (!getSurname().equals(that.getSurname())) return false;
         if (!getPetName().equals(that.getPetName())) return false;
         if (!getPetBreedName().equals(that.getPetBreedName())) return false;
-        return getLastActiveTime().equals(that.getLastActiveTime());
+        return true;
     }
 
     @Override
@@ -89,7 +89,18 @@ public class FriendInfo {
         result = 31 * result + getSurname().hashCode();
         result = 31 * result + getPetName().hashCode();
         result = 31 * result + getPetBreedName().hashCode();
-        result = 31 * result + getLastActiveTime().hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "\n\nFriendInfo{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", petName='" + petName + '\'' +
+                ", petBreedName='" + petBreedName + '\'' +
+                ", lastActiveTime=" + lastActiveTime +
+                '}';
     }
 }

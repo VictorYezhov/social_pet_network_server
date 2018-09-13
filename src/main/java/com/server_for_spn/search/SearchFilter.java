@@ -20,7 +20,7 @@ public class SearchFilter {
 
 
     private List<User> filtered;
-    private List<User> toRemove;
+    private List<Long> toRemove;
     private SearchForm searchForm;
 
     public SearchFilter() {
@@ -51,7 +51,7 @@ public class SearchFilter {
         for (User user: filtered) {
             Pet p = getPetFromListById(user);
             if(!p.getBreed().getName().toLowerCase().contains(searchForm.getBreed().toLowerCase())){
-                toRemove.add(user);
+                toRemove.add(user.getId());
             }
         }
         return this;
@@ -63,7 +63,7 @@ public class SearchFilter {
         for (User user: filtered) {
             Pet p = getPetFromListById(user);
             if(!p.getName().toLowerCase().contains(searchForm.getName().toLowerCase())){
-                toRemove.add(user);
+                toRemove.add(user.getId());
             }
         }
         return this;
@@ -78,7 +78,7 @@ public class SearchFilter {
             builder.append(user.getFamilyName());
             if(!builder.toString().toLowerCase().contains(searchForm.getOwnersName().toLowerCase())){
                 System.out.println("User "+ user.getName()+" "+user.getFamilyName());
-                toRemove.add(user);
+                toRemove.add(user.getId());
             }
             builder.delete(0, builder.length());
         }
@@ -92,14 +92,14 @@ public class SearchFilter {
         for(User user: filtered){
             Pet p = getPetFromListById(user);
             if(!p.getBreed().getType().equals(searchForm.getPetType())){
-                toRemove.add(user);
+                toRemove.add(user.getId());
             }
         }
         return this;
     }
 
     private SearchFilter end(){
-        filtered.removeAll(toRemove);
+        remove();
         toRemove.clear();
         return this;
     }
@@ -112,6 +112,17 @@ public class SearchFilter {
             }
         }
         throw  new RuntimeException();
+    }
+    private void remove(){
+        for (Long id:
+             toRemove) {
+            for (int i = 0; i < filtered.size(); i++) {
+
+                if(filtered.get(i).getId().equals(id)){
+                    filtered.remove(i);
+                }
+            }
+        }
     }
 
 }

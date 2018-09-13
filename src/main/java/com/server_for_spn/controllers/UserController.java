@@ -217,6 +217,7 @@ public class UserController {
             }
             friendsInfo.add(info);
         }
+        System.out.println(friendsInfo);
         return new ResponseEntity<>(friendsInfo, HttpStatus.OK);
     }
 

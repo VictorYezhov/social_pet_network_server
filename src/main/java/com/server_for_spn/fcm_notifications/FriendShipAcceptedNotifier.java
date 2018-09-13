@@ -35,6 +35,7 @@ public class FriendShipAcceptedNotifier implements NotificationService{
                 .setToken(to.getFcmToken())
                 .setApnsConfig(apnsConfig)
                 .setAndroidConfig(androidConfig)
+                .putData("type", notificationType.name())
                 .putData("new_friend_id", from.getId().toString())
                 .setNotification(new Notification("Notification", from.getId().toString()))
                 .build();
