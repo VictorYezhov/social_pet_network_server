@@ -335,6 +335,10 @@ public class FriendshipController {
         return friendWhoAreNotInPhoneCache;
     }
 
+    @PostMapping("/deleteUserFromFriendList")
+    private String deleteUserFromFriendList(@RequestParam("userId") Long userID, @RequestParam("friendId") Long friendID){
+        return "OK";
+    }
 
 
 }
