@@ -25,6 +25,7 @@ public class DeleteFriendNotifier implements NotificationService {
                 .setToken(to.getFcmToken())
                 .setApnsConfig(apnsConfig)
                 .setAndroidConfig(androidConfig)
+                .putData("type", notificationType.name())
                 .putData("user_from", from.getId().toString())
                 .setNotification(new Notification("Notification", from.getId().toString())).build();
 
