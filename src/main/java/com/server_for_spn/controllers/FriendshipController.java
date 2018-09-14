@@ -302,8 +302,7 @@ public class FriendshipController {
 
         List<FriendInfo> friendWhoAreNotInPhoneCache = new ArrayList<>();
 
-        for (Friends f:
-             userService.findOne(id).getFriends()) {
+        for (Friends f: userService.findOne(id).getFriends()) {
 
             User friend;
 
@@ -352,6 +351,37 @@ public class FriendshipController {
         deleteFriendNotifier.sendNotification(user, friend);
 
         return "OK";
+    }
+
+    @PostMapping("/getListOfFriendIDsWhoDeleteUserFromFriends")
+    private List<Long> getListOfFriendIDsWhoDeleteUserFromFriends(@RequestParam("list_friend_ids") List<Long> listOfIds,
+                                                              @RequestParam("user_id") Long userID){
+
+
+        List<Long> friendWhoDeleteUserFromFriend = new ArrayList<>();
+        List<Friends> friends = userService.findOne(userID).getFriends();
+        //userService.findOne(id).getFriends()
+        for (Friends f: friends) {
+
+
+            User friend;
+
+            if(!userID.equals(f.getSide1().getId())){
+                friend = f.getSide1();
+            }else {
+                friend = f.getSide2();
+            }
+
+            if(!listOfIds.contains(friend.getId())){
+                friendWhoDeleteUserFromFriend.add(friend.getId());
+            }
+
+
+        }
+
+        return friendWhoDeleteUserFromFriend;
+
+
     }
 
 
