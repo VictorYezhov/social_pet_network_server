@@ -185,6 +185,12 @@ public class UserController {
         return time1.replaceAll(":","\\^");
     }
 
+    @PostMapping("/getNumberOfFriendsOfAnotherUser")
+    public Integer getNumberOfFriendsOfAnotherUser(@RequestParam("user") Long id){
+        User user = userService.findOne(id);
+        return user.getFriends().size();
+    }
+
     @PostMapping("/search")
     public ResponseEntity<?> search(@RequestBody SearchForm searchForm){
         System.out.println(searchForm);
