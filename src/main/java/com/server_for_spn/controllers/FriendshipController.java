@@ -170,6 +170,35 @@ public class FriendshipController {
         return new ResponseEntity<>( newFriend, HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/addToFriendsWhenOneUserFoundPetOfAnotherUser")
+    public ResponseEntity<FriendInfo> addToFriendsWhenOneUserFoundPetOfAnotherUser(
+            @RequestParam("user_who_found_pet") Long userWhoFoundPetID,
+            @RequestParam("user_who_lost_pet") Long userWhoLostPetID){
+        User userWhoFoundPet = userService.findOne(userWhoFoundPetID);
+        User userWhoLostPet = userService.findOne(userWhoLostPetID);
+
+        Friends friendship = new Friends();
+        friendship.setSide1(userWhoFoundPet);
+        friendship.setSide2(userWhoLostPet);
+        friendShipService.save(friendship);
+
+        acceptedFriendshipNotifier.sendNotification(userWhoFoundPet, userWhoLostPet);
+
+        FriendInfo newFriend = new FriendInfo();
+
+        newFriend.setName(userWhoLostPet.getName());
+        newFriend.setSurname(userWhoLostPet.getFamilyName());
+        newFriend.setId(userWhoLostPet.getId());
+        newFriend.setLastActiveTime(userWhoLostPet.getUserState().getLastActiveTime());
+        Pet pet = getCurrentPetChoise(userWhoLostPet);
+        if(pet != null) {
+            newFriend.setPetName(pet.getName());
+            newFriend.setPetBreedName(pet.getBreed().getName());
+        }
+
+        return new ResponseEntity<>( newFriend, HttpStatus.ACCEPTED);
+    }
+
 
 
     @PostMapping("/getUsersFriends")
