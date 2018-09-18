@@ -1,6 +1,7 @@
 package com.server_for_spn.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Victor on 06.09.2018.
@@ -18,6 +19,8 @@ public class Photo {
     private User owner;
     private boolean main;
 
+    @OneToMany(mappedBy = "photo", fetch = FetchType.LAZY)
+    private List<Comment> comments;
 
     public Photo() {
     }
@@ -60,5 +63,13 @@ public class Photo {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
