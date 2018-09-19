@@ -8,11 +8,14 @@ import com.google.api.services.storage.Storage;
 import com.server_for_spn.dto.RegistrationForm;
 import com.server_for_spn.entity.Breed;
 import com.server_for_spn.entity.TestEntity;
+import com.server_for_spn.entity.User;
 import com.server_for_spn.enums.NotificationType;
 import com.server_for_spn.enums.PetType;
+import com.server_for_spn.fcm_notifications.NotificationService;
 import com.server_for_spn.service.BreedService;
 import com.server_for_spn.service.FCMService;
 
+import com.server_for_spn.service.UserService;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
@@ -23,6 +26,7 @@ import org.ehcache.config.units.MemoryUnit;
 import org.ehcache.expiry.Expirations;
 import org.ehcache.sizeof.impl.JvmInformation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -40,6 +44,13 @@ public class TestController {
     @Autowired
     private BreedService breedService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    @Qualifier("TestNotifier")
+    private NotificationService test;
+
 
     @Autowired
     FCMService fcmService;
@@ -56,7 +67,9 @@ public class TestController {
         StringBuilder builder = new StringBuilder();
 
 
+        User u = userService.findOne(1L);
 
+        test.sendNotification(u, u);
 
         List<String> strings = new ArrayList<>();
         strings.add("Putin");

@@ -98,9 +98,6 @@ public class MessageController {
         }
 
         return messageService.countInreadedMessagesForUser(id);
-
-
-
     }
 
 

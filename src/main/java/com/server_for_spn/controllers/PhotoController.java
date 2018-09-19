@@ -47,7 +47,6 @@ public class PhotoController {
     public ResponseEntity<?> updateMainPhoto(@RequestPart(name = "img") MultipartFile img,
                                              @RequestParam("id")Long id,
                                              Authentication authentication){
-
         User user = userService.findOne(id);
         if(!authentication.getPrincipal().toString().equals(user.getEmail())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
