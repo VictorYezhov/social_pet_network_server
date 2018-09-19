@@ -5,6 +5,7 @@ import com.server_for_spn.entity.Photo;
 import com.server_for_spn.entity.User;
 import com.server_for_spn.service.ImageSavingService;
 import com.server_for_spn.service.UserService;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,7 +53,8 @@ public class PhotoController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-       if(imageSavingService.savePhoto(img, user, true)) {
+        Long idNew =imageSavingService.savePhoto(img, user, true);
+        if(idNew != null) {
            return new ResponseEntity<>(HttpStatus.OK);
        }else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -70,8 +72,9 @@ public class PhotoController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(imageSavingService.savePhoto(img, user, false)) {
-            return new ResponseEntity<>(HttpStatus.OK);
+        Long idNew =imageSavingService.savePhoto(img, user, false);
+        if(idNew != null) {
+            return new ResponseEntity<>(idNew,HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -87,8 +90,11 @@ public class PhotoController {
         if(!authentication.getPrincipal().toString().equals(user.getEmail())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         Photo photo = photoDao.getOne(photoId);
         Path path = Paths.get(photo.getPath());
+        System.out.println("RETURNING MAIN PHOTO FOR USER: "+ user.getId());
+        System.out.println("PATH: "+ path.toString());
 
         try {
             return new ResponseEntity<>(Files.readAllBytes(path), HttpStatus.OK);
@@ -102,7 +108,11 @@ public class PhotoController {
                                                 Authentication authentication){
         User user = userService.findOne(requesterId);
         Photo photo = photoDao.findFirstByOwnerAndMain(user, true);
+        if(photo == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         Path path = Paths.get(photo.getPath());
+        System.out.println("RETURNING MAIN PHOTO FOR USER: "+ user.getId());
+        System.out.println("PATH: "+ path.toString());
         try {
             return new ResponseEntity<>(Files.readAllBytes(path), HttpStatus.OK);
         } catch (NoSuchFileException e){

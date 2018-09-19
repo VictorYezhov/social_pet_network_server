@@ -2,12 +2,16 @@ package com.server_for_spn.service;
 
 import com.server_for_spn.dao.UserDAO;
 import com.server_for_spn.dao.UserStateDAO;
+import com.server_for_spn.dto.Pair;
 import com.server_for_spn.dto.PetDTO;
 import com.server_for_spn.dto.RegistrationForm;
 import com.server_for_spn.entity.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
 import java.util.List;
@@ -39,6 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BreedService breedService;
+
+    @Autowired
+    private ImageSavingService imageSavingService;
 
 
     @Override
@@ -77,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String registration(RegistrationForm registrationForm) {
+    public Pair<String, User> registration(RegistrationForm registrationForm) {
 
 
         byte[] decodedBytesOfPassword = Base64.getDecoder().decode(registrationForm.getPassword());
@@ -92,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
         if(checkExistence(registrationForm.getEmail(), registrationForm.getPassword())){
             //TODO do smt
-            return "User with such email and password already exists";
+            return new Pair<>("User with such email and password already exists", null);
         }
 
         User user = new User();
@@ -105,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
         Country country  = countryService.findOne(registrationForm.getCity().getCountry().getId());
         if(country == null){
-            return "No such country exists\n";
+            return new Pair<>("No such country exists\n", null);
         }
         City city = cityService.findByNameAndCountry(registrationForm.getCity().getName(), country);
 
@@ -149,7 +156,18 @@ public class UserServiceImpl implements UserService {
         userState.setCurrentPetChoose(pet.getId());
         userStateDAO.save(userState);
 
-        return "You have been registered!";
+        return new Pair<>("You have been registered!", user);
+    }
+
+    @Override
+    public Pair<String, User> registration(RegistrationForm registrationForm, MultipartFile img) {
+        Pair<String, User> pair = registration(registrationForm);
+        if(pair.getValue() == null){
+            return pair;
+        }
+        imageSavingService.savePhoto(img, pair.getValue(), true);
+
+        return pair;
     }
 
     @Override

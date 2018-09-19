@@ -30,19 +30,19 @@ public class ImageSavingService {
     private PhotoDao photoDao;
 
 
-    public boolean savePhoto(MultipartFile img, User user, boolean main){
+    public Long savePhoto(MultipartFile img, User user, boolean main){
         String path =System.getProperty("user.dir") + "/data/Users/"
                 + user.getName()+user.getId()+"/";
         File filePath = new File(path);
         //user.setPathToImage(path+image.getOriginalFilename());
         //System.err.println(user.getPathToImage());
         filePath.mkdirs();
+        Photo photo = new Photo();
         try {
             // Get the file and
             // Save it somewhere
             byte[] bytes = img.getBytes();
             Path pathTo = Paths.get(path+System.currentTimeMillis()+img.getOriginalFilename());
-            Photo photo = new Photo();
             photo.setOwner(user);
             photo.setMain(main);
             photo.setPath(pathTo.toString());
@@ -50,9 +50,9 @@ public class ImageSavingService {
             Files.write(pathTo, bytes);
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
-        return true;
+        return photo.getId();
     }
 
 }
