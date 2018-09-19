@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -42,10 +43,26 @@ public class UserController {
     public ResponseEntity<String> registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
             return new ResponseEntity<>( "registrationForm is null", HttpStatus.BAD_REQUEST);;
-        userService.registration(registrationForm);
+       Pair<String, User> response =  userService.registration(registrationForm);
+       if(response.getValue()!=null)
         return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
+       else {
+           return new ResponseEntity<String>(response.getKey(), HttpStatus.BAD_REQUEST);
+       }
     }
 
+    @PostMapping("/registrationWithPhoto")
+    public ResponseEntity<String> registrationWithPhoto(@RequestBody RegistrationForm registrationForm,
+                                                        @RequestPart(name = "img") MultipartFile img){
+        if(registrationForm == null)
+            return new ResponseEntity<>( "registrationForm is null", HttpStatus.BAD_REQUEST);
+        Pair<String, User> response =  userService.registration(registrationForm, img);
+        if(response.getValue()!=null)
+            return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
+        else {
+            return new ResponseEntity<String>(response.getKey(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/loginFailed")
     public String loginFail(){
