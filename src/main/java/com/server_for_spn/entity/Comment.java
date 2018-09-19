@@ -20,6 +20,13 @@ public class Comment {
     public Comment() {
     }
 
+    public Comment(Timestamp time, Long userWhoLeaveAComment, String text, Photo photo) {
+        this.time = time;
+        this.userWhoLeaveAComment = userWhoLeaveAComment;
+        this.text = text;
+        this.photo = photo;
+    }
+
     public Long getId() {
         return id;
     }
