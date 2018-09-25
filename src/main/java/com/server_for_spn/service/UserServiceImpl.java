@@ -97,9 +97,9 @@ public class UserServiceImpl implements UserService {
 
         registrationForm.setPassword(bCryptPasswordEncoder.encode(registrationForm.getPassword()));
 
-        if(checkExistence(registrationForm.getEmail(), registrationForm.getPassword())){
+        if(checkExistence(registrationForm.getEmail())){
             //TODO do smt
-            return new Pair<>("User with such email and password already exists", null);
+            return new Pair<>("User with such email already exists", null);
         }
 
         User user = new User();
@@ -171,8 +171,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkExistence(String email, String password) {
-        return userDAO.findFirstByEmailAndPassword(email, password) != null;
+    public boolean checkExistence(String email) {
+        return userDAO.findFirstByEmail(email) != null;
     }
 
 

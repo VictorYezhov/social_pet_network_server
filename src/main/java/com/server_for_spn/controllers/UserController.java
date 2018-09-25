@@ -3,9 +3,12 @@ package com.server_for_spn.controllers;
 import com.server_for_spn.dto.*;
 import com.server_for_spn.entity.*;
 import com.server_for_spn.search.SearchFilter;
+import com.server_for_spn.security.SecurityConstants;
 import com.server_for_spn.service.CityService;
 import com.server_for_spn.service.CountryService;
 import com.server_for_spn.service.UserService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.*;
+
+import static com.server_for_spn.security.SecurityConstants.EXPIRATION_TIME;
+import static com.server_for_spn.security.SecurityConstants.SECRET;
 
 /**
  * Created by Victor on 01.07.2018.
@@ -40,13 +46,19 @@ public class UserController {
      * @return
      */
     @PostMapping("/registration")
-    public ResponseEntity<String> registration(@RequestBody RegistrationForm registrationForm){
+    public ResponseEntity<?> registration(@RequestBody RegistrationForm registrationForm){
         if(registrationForm == null)
             return new ResponseEntity<>( "registrationForm is null", HttpStatus.BAD_REQUEST);;
        Pair<String, User> response =  userService.registration(registrationForm);
-       if(response.getValue()!=null)
-        return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
-       else {
+       if(response.getValue()!=null) {
+           String token = Jwts.builder()
+                   .setSubject(response.getValue().getEmail())
+                   .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                   .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
+                   .compact();
+           Pair<String, String> pair = new Pair<>(SecurityConstants.TOKEN_PREFIX+token, String.valueOf(response.getValue().getId()));
+           return new ResponseEntity<>(pair, HttpStatus.ACCEPTED);
+       }else {
            return new ResponseEntity<String>(response.getKey(), HttpStatus.BAD_REQUEST);
        }
     }
@@ -57,8 +69,9 @@ public class UserController {
         if(registrationForm == null)
             return new ResponseEntity<>( "registrationForm is null", HttpStatus.BAD_REQUEST);
         Pair<String, User> response =  userService.registration(registrationForm, img);
-        if(response.getValue()!=null)
-            return new ResponseEntity<>( "OK", HttpStatus.ACCEPTED);
+        if(response.getValue()!=null) {
+            return new ResponseEntity<>("OK", HttpStatus.ACCEPTED);
+        }
         else {
             return new ResponseEntity<String>(response.getKey(), HttpStatus.BAD_REQUEST);
         }

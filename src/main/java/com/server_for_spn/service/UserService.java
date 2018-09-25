@@ -23,7 +23,7 @@ public interface UserService {
 
     boolean checkExistenceById(Long Id);
 
-    boolean checkExistence(String email, String password);
+    boolean checkExistence(String email);
 
     Pair<String, User> registration(RegistrationForm registrationForm);
     Pair<String, User> registration(RegistrationForm registrationForm, MultipartFile img);
