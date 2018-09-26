@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -131,7 +132,21 @@ public class UserServiceImpl implements UserService {
             weightService.save(weight);
         }
 
-        Breed breed = breedService.findOne(registrationForm.getPet().getBreed().getId());
+        Breed breed;
+
+        if(registrationForm.getPet().getBreed().getId() == null){
+            System.out.println("breed null");
+            breed = new Breed();
+            breed.setName(registrationForm.getPet().getBreed().getName());
+            System.out.println("type " + registrationForm.getPet().getBreed().getType());
+            breed.setType(registrationForm.getPet().getBreed().getType());
+            List<Pet> pList = new ArrayList<>();
+            breed.setPetList(pList);
+            breedService.save(breed);
+        }else{
+            System.out.println("breed not null");
+            breed = breedService.findOne(registrationForm.getPet().getBreed().getId());
+        }
 
         Pet pet = new Pet(registrationForm.getPet());
         pet.setBreed(breed);
