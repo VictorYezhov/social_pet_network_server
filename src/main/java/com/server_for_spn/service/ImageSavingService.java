@@ -30,7 +30,7 @@ public class ImageSavingService {
     private PhotoDao photoDao;
 
 
-    public Long savePhoto(MultipartFile img, User user, boolean main){
+    public Long savePhoto(MultipartFile img, User user, boolean main, String caption){
         String path =System.getProperty("user.dir") + "/data/Users/"
                 + user.getName()+user.getId()+"/";
         File filePath = new File(path);
@@ -38,6 +38,8 @@ public class ImageSavingService {
         //System.err.println(user.getPathToImage());
         filePath.mkdirs();
         Photo photo = new Photo();
+        if(caption!=null)
+            photo.setCaption(caption);
         try {
             // Get the file and
             // Save it somewhere

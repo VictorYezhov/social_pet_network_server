@@ -47,12 +47,20 @@ public class PhotoController {
     public ResponseEntity<?> updateMainPhoto(@RequestPart(name = "img") MultipartFile img,
                                              @RequestParam("id")Long id,
                                              Authentication authentication){
+
         User user = userService.findOne(id);
         if(!authentication.getPrincipal().toString().equals(user.getEmail())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Long idNew =imageSavingService.savePhoto(img, user, true);
+        Long idNew =imageSavingService.savePhoto(img, user, true, null);
+        List<Photo> photos = user.getPhotos();
+        for (Photo photo: photos) {
+            if(!photo.getId().equals(idNew)){
+                photo.setMain(false);
+                photoDao.save(photo);
+            }
+        }
         if(idNew != null) {
            return new ResponseEntity<>(HttpStatus.OK);
        }else {
@@ -64,6 +72,7 @@ public class PhotoController {
     @PostMapping("/addNewPhoto")
     public ResponseEntity<?> addNewPhoto(@RequestPart(name = "img") MultipartFile img,
                                              @RequestParam("id")Long id,
+                                             @RequestParam("caption") String caption,
                                              Authentication authentication){
 
         User user = userService.findOne(id);
@@ -71,7 +80,7 @@ public class PhotoController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Long idNew =imageSavingService.savePhoto(img, user, false);
+        Long idNew =imageSavingService.savePhoto(img, user, false, caption);
         if(idNew != null) {
             return new ResponseEntity<>(idNew,HttpStatus.OK);
         }else {
@@ -142,6 +151,18 @@ public class PhotoController {
             requestList.add(p.getId());
         }
         return new ResponseEntity<>(requestList, HttpStatus.OK);
+    }
+
+
+    @GetMapping("api/getPhotoCaption")
+    public ResponseEntity<String> getPhotoCaption(@RequestParam("photoId") String id){
+
+
+        String caption = photoDao.getOne(Long.decode(id)).getCaption();
+        caption = caption.replaceAll("\\s", "%");
+
+        System.out.println(caption);
+        return new ResponseEntity<>(caption, HttpStatus.OK);
     }
 
 

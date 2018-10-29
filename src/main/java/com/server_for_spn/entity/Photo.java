@@ -18,6 +18,7 @@ public class Photo {
     @ManyToOne
     private User owner;
     private boolean main;
+    private String caption;
 
     @OneToMany(mappedBy = "photo", fetch = FetchType.LAZY)
     private List<Comment> comments;
@@ -71,5 +72,13 @@ public class Photo {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 }

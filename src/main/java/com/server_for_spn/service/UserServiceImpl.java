@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
         if(pair.getValue() == null){
             return pair;
         }
-        imageSavingService.savePhoto(img, pair.getValue(), true);
+        imageSavingService.savePhoto(img, pair.getValue(), true, null);
 
         return pair;
     }
@@ -195,4 +195,12 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllByCity(City city) {
         return userDAO.findAllByCity(city);
     }
+
+
+
+
+
+
+
+
 }
