@@ -4,9 +4,7 @@ import com.server_for_spn.dto.*;
 import com.server_for_spn.entity.*;
 import com.server_for_spn.search.SearchFilter;
 import com.server_for_spn.security.SecurityConstants;
-import com.server_for_spn.service.CityService;
-import com.server_for_spn.service.CountryService;
-import com.server_for_spn.service.UserService;
+import com.server_for_spn.service.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +35,61 @@ public class UserController {
     @Autowired
     private SearchFilter searchFilter;
 
+    @Autowired
+    private PetService petService;
+
 
     @Autowired
     private CityService  cityService;
+
+    @Autowired
+    private BreedService breedService;
+
+    @PostMapping("/editInfo")
+    public ResponseEntity<String> editInfo(Authentication authentication,
+                                           @RequestBody EditForm editForm,
+                                           @RequestParam("user_id") Long userID,
+                                           @RequestParam("pet_id") Long petID){
+
+        User user = userService.findOne(userID);
+
+        // change user info
+        City city = user.getCity();
+
+        if (!city.getName().equals(editForm.getCity().getName())){
+            Country country = countryService.findOne(editForm.getCity().getCountry().getId());
+            City cityInDb = cityService.findByNameAndCountry(editForm.getCity().getName(), country);
+            if (cityInDb == null){
+                City newCity = new City(editForm.getCity().getName(), country);
+                cityService.save(newCity);
+                user.setCity(newCity);
+            }else {
+                user.setCity(cityInDb);
+            }
+        }
+
+        user.setName(editForm.getOwnerName());
+        user.setPhoneNumber(editForm.getPhone());
+        userService.save(user);
+
+        // change pet info
+        Pet pet = petService.findOne(petID);
+        pet.setName(editForm.getPetName());
+
+        Breed b = breedService.findOne(editForm.getBreed().getId());
+        pet.setBreed(b);
+
+        Weight weight = pet.getWeight();
+        weight.setMass(editForm.getWeight());
+        pet.setWeight(weight);
+        pet.setAge(editForm.getAge());
+        pet.setAttitude(editForm.getAttitude());
+        petService.save(pet);
+
+        return new ResponseEntity<>("OK" , HttpStatus.ACCEPTED);
+
+    }
+
     /**
      * Registration of new Users
      * @param registrationForm

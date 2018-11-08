@@ -23,6 +23,14 @@ public class City {
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
     private List<User> users;
 
+    public City() {
+    }
+
+    public City(String name, Country country) {
+        this.name = name;
+        this.country = country;
+    }
+
     public Long getId() {
         return id;
     }
