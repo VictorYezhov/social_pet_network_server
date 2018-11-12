@@ -1,7 +1,9 @@
 package com.server_for_spn.controllers;
 
 import com.server_for_spn.dao.PhotoDao;
+import com.server_for_spn.dao.PhotoLikeDao;
 import com.server_for_spn.entity.Photo;
+import com.server_for_spn.entity.PhotoLikes;
 import com.server_for_spn.entity.User;
 import com.server_for_spn.service.ImageSavingService;
 import com.server_for_spn.service.UserService;
@@ -23,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 /**
  * Created by Victor on 06.09.2018.
@@ -39,6 +42,9 @@ public class PhotoController {
 
     @Autowired
     private ImageSavingService imageSavingService;
+
+    @Autowired
+    private PhotoLikeDao photoLikeDao;
 
 
 
@@ -163,6 +169,59 @@ public class PhotoController {
 
         System.out.println(caption);
         return new ResponseEntity<>(caption, HttpStatus.OK);
+    }
+
+
+
+
+    @PostMapping("/like")
+    public ResponseEntity<Boolean> like(@RequestParam("userID") Long userId,
+                                        @RequestParam("photoId") Long photoId,
+                                        Authentication authentication){
+        User user = userService.findByEmail(authentication.getPrincipal().toString());
+
+        if(!userId.equals(user.getId())){
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+
+        List<PhotoLikes> likes = photoLikeDao.findAllByPhotoId(photoId);
+        PhotoLikes like = null;
+
+        boolean contains = false;
+
+        for (PhotoLikes pl: likes) {
+            if(pl.getUserId().equals(userId)){
+                contains = true;
+                like = pl;
+                break;
+            }
+        }
+        Photo photo  = photoDao.getOne(photoId);
+        if(contains){
+            photoLikeDao.deleteById(like.getId());
+            photo.setLikes(photo.getLikes()-1);
+            photoDao.save(photo);
+        }else {
+            PhotoLikes photoLikes = new PhotoLikes();
+            photoLikes.setPhotoId(photo.getId());
+            photoLikes.setUserId(user.getId());
+            photoLikeDao.save(photoLikes);
+            photo.setLikes(photo.getLikes() + 1);
+            photoDao.save(photo);
+        }
+
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+    }
+
+    @GetMapping("/getLikesIds")
+    public List<Long> getLikeIds(@RequestParam("photoId") Long id){
+        System.out.println("Getting likes for: " +id);
+        List<PhotoLikes> likes = photoLikeDao.findAllByPhotoId(id);
+        List<Long> userids = new ArrayList<>();
+        for(PhotoLikes pl:likes){
+            userids.add(pl.getUserId());
+        }
+        return userids;
     }
 
 
