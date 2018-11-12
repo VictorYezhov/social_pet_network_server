@@ -56,7 +56,6 @@ public class UserController {
         // change user info
         City city = user.getCity();
 
-        if (!city.getName().equals(editForm.getCity().getName())){
             Country country = countryService.findOne(editForm.getCity().getCountry().getId());
             City cityInDb = cityService.findByNameAndCountry(editForm.getCity().getName(), country);
             if (cityInDb == null){
@@ -66,7 +65,7 @@ public class UserController {
             }else {
                 user.setCity(cityInDb);
             }
-        }
+
 
         user.setName(editForm.getOwnerName());
         user.setPhoneNumber(editForm.getPhone());
