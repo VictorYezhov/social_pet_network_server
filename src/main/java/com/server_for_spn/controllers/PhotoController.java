@@ -210,7 +210,7 @@ public class PhotoController {
             photoDao.save(photo);
         }
 
-        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @GetMapping("/getLikesIds")
@@ -223,11 +223,4 @@ public class PhotoController {
         }
         return userids;
     }
-
-
-
-
-
-
-
 }

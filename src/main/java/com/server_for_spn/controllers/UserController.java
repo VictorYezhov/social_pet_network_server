@@ -277,11 +277,11 @@ public class UserController {
         if(country == null){
             return new ResponseEntity<>("Wrong Country name",HttpStatus.BAD_REQUEST);
         }
-        City city = cityService.findByNameAndCountry(searchForm.getUserCity(), country);
-        if(city == null){
-            return  new ResponseEntity<>("Wrong city name",HttpStatus.BAD_REQUEST);
+
+        List<User> users = new ArrayList<>();
+        for(City c: country.getCities()){
+            users.addAll(c.getUsers());
         }
-        List<User> users = userService.findAllByCity(city);
         if(users.isEmpty()){
             return new ResponseEntity<>("No  users in This city",HttpStatus.ACCEPTED);
         }
